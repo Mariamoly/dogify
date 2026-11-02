@@ -1,99 +1,203 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="ka">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<meta name="theme-color" content="#B8470F">
-<title>WoofMap</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="theme-color" content="#ffffff">
+<title>Dogify - ცუგოების რუკა</title>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Sans+Georgian:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
-:root{--ink:#1F2A24;--muted:#56625B;--brand:#B8470F;--soft:#FFE9D6;--line:#8A9A90;--bg:#fff}
-*{box-sizing:border-box}
-html,body{margin:0;height:100%}
-body{font-family:'Noto Sans Georgian','Segoe UI',system-ui,sans-serif;color:var(--ink);background:#EDEFEA}
-#app{max-width:480px;height:100dvh;margin:0 auto;background:var(--bg);position:relative;overflow:hidden}
-.view{height:100%;display:flex;flex-direction:column}
+*{box-sizing:border-box;margin:0;padding:0;font-family:'Inter','Noto Sans Georgian',-apple-system,BlinkMacSystemFont,sans-serif}
+body{background:#f1f3f5;display:flex;justify-content:center;align-items:center;min-height:100vh}
 .hidden{display:none!important}
-.demo{background:#1F2A24;color:#fff;font-size:12px;padding:6px 12px;text-align:center}
-.center{flex:1;display:flex;flex-direction:column;justify-content:center;gap:14px;padding:24px}
-h1{margin:0;font-size:36px;text-align:center}
-.sub{margin:0 0 12px;text-align:center;color:var(--muted)}
-label{font-size:14px;font-weight:600}
-input[type=email],input[type=text],input[type=number],input[type=password]{height:52px;padding:0 14px;border:1px solid var(--line);border-radius:8px;font:inherit;font-size:16px;width:100%}
-button{font:inherit;cursor:pointer}
-.primary{height:56px;border:0;border-radius:28px;background:var(--brand);color:#fff;font-size:16px;font-weight:700;width:100%}
-.primary:disabled{opacity:.6}
-.primary.stop{background:#3B4640}
-.link{background:none;border:0;color:var(--brand);font-weight:600;padding:8px}
-.logo{width:72px;height:72px;border-radius:50%;background:var(--brand);align-self:center}
-.avatar{width:140px;height:140px;border-radius:50%;background:#E4E9E4 center/cover;align-self:center;border:0;font-size:48px;color:var(--muted)}
-header{height:60px;flex:none;display:flex;align-items:center;justify-content:space-between;padding:0 16px 0 20px;background:var(--soft);font-size:20px;font-weight:700}
-header .link{font-size:14px}
-#map{flex:1;min-height:0}
-.bar{position:absolute;left:16px;right:16px;bottom:calc(24px + env(safe-area-inset-bottom));display:flex;gap:12px;z-index:1000}
-.sos{width:56px;height:56px;flex:none;border:0;border-radius:50%;background:#B3261E;color:#fff;font-weight:700;box-shadow:0 2px 8px rgba(0,0,0,.3)}
-.bar .primary{box-shadow:0 2px 8px rgba(0,0,0,.3)}
-.pin{width:48px;height:48px;border-radius:50%;border:3px solid #fff;box-shadow:0 2px 6px rgba(0,0,0,.4);background:#3D5A99 center/cover;color:#fff;font-weight:700;font-size:20px;display:flex;align-items:center;justify-content:center}
-.pin.mine{border-color:#2563EB}
-.pin.mine.walking{border-color:#15803D;box-shadow:0 0 0 4px rgba(21,128,61,.35),0 2px 6px rgba(0,0,0,.4)}
-.me{width:22px;height:22px;border-radius:50%;background:#2563EB;border:3px solid #fff;box-shadow:0 0 0 2px rgba(37,99,235,.3)}
-.me.walking{background:#15803D;box-shadow:0 0 0 2px rgba(21,128,61,.3)}
-.locate{position:absolute;right:16px;bottom:calc(96px + env(safe-area-inset-bottom));z-index:1000;width:48px;height:48px;border-radius:50%;border:0;background:#fff;box-shadow:0 2px 8px rgba(0,0,0,.3);display:flex;align-items:center;justify-content:center}
-#toast{position:fixed;left:50%;bottom:110px;transform:translateX(-50%);background:#1F2A24;color:#fff;padding:10px 16px;border-radius:20px;font-size:14px;z-index:3000;max-width:90%;text-align:center;opacity:0;pointer-events:none;transition:opacity .2s}
+button{cursor:pointer}
+
+/* მობილურის ჩარჩო */
+.app-container{width:100%;max-width:414px;height:100vh;height:100dvh;max-height:896px;background:#fff;position:relative;box-shadow:0 10px 30px rgba(0,0,0,.06);display:flex;flex-direction:column;overflow:hidden}
+@media (min-width:500px){.app-container{border-radius:32px;height:844px;border:1px solid #dee2e6}}
+
+/* ჰედერი */
+.header{padding:16px 20px;background:#fff;display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid #f1f3f5;z-index:10}
+.logo{font-weight:700;font-size:1.15rem;color:#1a1a1a;letter-spacing:-.3px;display:flex;align-items:center;gap:8px}
+.demo{background:#1a1a1a;color:#fff;font-size:.72rem;padding:6px 12px;text-align:center}
+
+/* ეკრანები */
+.content-area{flex:1;position:relative;overflow:hidden;background:#fff;min-height:0}
+.screen{position:absolute;inset:0;display:none;flex-direction:column;overflow-y:auto}
+.screen.active{display:flex}
+
+/* შესვლა და ძაღლის შექმნა */
+.center-screen{padding:32px 24px;justify-content:center;align-items:center;text-align:center}
+.login-content{width:100%;max-width:320px;display:flex;flex-direction:column;gap:20px}
+.login-logo-area{font-size:2.5rem;color:#1a1a1a;margin-bottom:4px}
+.login-title{font-size:1.6rem;font-weight:700;color:#1a1a1a;letter-spacing:-.5px}
+.login-subtitle{font-size:.9rem;color:#6c757d;margin-bottom:10px}
+.paws-animation{display:flex;justify-content:center;gap:16px;margin-bottom:8px;color:#adb5bd;font-size:1.2rem}
+.paws-animation i{animation:pawPulse 1.5s infinite ease-in-out}
+.paws-animation i:nth-child(2){animation-delay:.3s}
+.paws-animation i:nth-child(3){animation-delay:.6s}
+@keyframes pawPulse{0%,100%{opacity:.4;transform:translateY(0)}50%{opacity:1;transform:translateY(-4px);color:#1a1a1a}}
+@media (prefers-reduced-motion:reduce){.paws-animation i{animation:none}}
+.login-form-group{text-align:left}
+.login-form-group label{display:block;font-size:.85rem;font-weight:600;color:#212529;margin-bottom:6px}
+.login-form-group input{width:100%;padding:14px 16px;border:1px solid #adb5bd;border-radius:14px;outline:none;font-size:.95rem;background:#f8f9fa;transition:all .2s ease}
+.login-form-group input:focus{border-color:#1a1a1a;background:#fff;box-shadow:0 0 0 3px rgba(26,26,26,.12)}
+.btn-login{width:100%;background:#1a1a1a;color:#fff;border:none;padding:15px;border-radius:14px;font-weight:600;font-size:1rem;transition:transform .1s ease,opacity .2s;margin-top:6px}
+.btn-login:active{transform:scale(.98)}
+.btn-login:disabled{opacity:.6}
+.btn-link{background:none;border:0;color:#495057;font-size:.88rem;font-weight:600;padding:8px;text-decoration:underline}
+.avatar-pick{width:120px;height:120px;border-radius:50%;margin:0 auto;border:2px dashed #adb5bd;background:#f8f9fa center/cover;color:#6c757d;font-size:2rem;display:flex;align-items:center;justify-content:center}
+
+/* რუკა */
+#map{width:100%;height:100%}
+.map-controls-floating{position:absolute;bottom:20px;left:0;right:0;z-index:1000;display:flex;justify-content:center;pointer-events:none}
+.toggle-switch-container{pointer-events:auto;background:rgba(255,255,255,.95);backdrop-filter:blur(12px);border-radius:30px;padding:8px 12px 8px 18px;display:flex;align-items:center;justify-content:center;gap:12px;min-width:200px;box-shadow:0 4px 20px rgba(0,0,0,.12);border:1px solid #e9ecef;transition:all .25s ease;user-select:none;font:inherit}
+.toggle-label{display:flex;align-items:center;justify-content:center;gap:8px;font-weight:600;font-size:.88rem;color:#212529;transition:color .25s ease;flex:1;text-align:center}
+.toggle-track{width:42px;height:24px;background:#ced4da;border-radius:20px;padding:2px;transition:background-color .25s ease;flex-shrink:0}
+.toggle-knob{width:20px;height:20px;background:#fff;border-radius:50%;box-shadow:0 1px 4px rgba(0,0,0,.15);transition:transform .25s cubic-bezier(.34,1.56,.64,1);display:flex;align-items:center;justify-content:center;color:#6c757d;font-size:.65rem}
+.toggle-switch-container.active{background:#fff;border-color:#2ecc71;box-shadow:0 4px 20px rgba(46,204,113,.2)}
+.toggle-switch-container.active .toggle-label{color:#1e8449}
+.toggle-switch-container.active .toggle-track{background:#2ecc71}
+.toggle-switch-container.active .toggle-knob{transform:translateX(18px);color:#1e8449}
+.fab{position:absolute;right:16px;z-index:1000;width:44px;height:44px;border-radius:50%;border:1px solid #e9ecef;background:#fff;color:#1a1a1a;box-shadow:0 4px 14px rgba(0,0,0,.12);display:flex;align-items:center;justify-content:center;font-size:1rem}
+.fab.locate{bottom:76px}
+.fab.sos{bottom:18px;background:#c92a2a;border-color:#c92a2a;color:#fff;font-weight:700;font-size:.78rem}
+.pet-marker{width:46px;height:46px;border-radius:50%;border:2px solid #1a1a1a;overflow:hidden;background:#1a1a1a center/cover;color:#fff;font-weight:700;font-size:1.1rem;display:flex;align-items:center;justify-content:center;box-shadow:0 2px 8px rgba(0,0,0,.2)}
+.pet-marker.mine{border-color:#2ecc71;box-shadow:0 0 0 4px rgba(46,204,113,.35),0 2px 8px rgba(0,0,0,.2)}
+
+/* პროფილი */
+.profile-container{padding:24px 20px}
+.pet-card{background:#f8f9fa;border:1px solid #e9ecef;border-radius:20px;padding:20px;display:flex;align-items:center;gap:16px;margin-bottom:20px}
+.avatar-wrap{position:relative;flex-shrink:0}
+.avatar-badge{position:absolute;right:-2px;bottom:-2px;width:26px;height:26px;border-radius:50%;background:#1a1a1a;color:#fff;border:2px solid #f8f9fa;display:flex;align-items:center;justify-content:center;font-size:.7rem;pointer-events:none}
+.pet-avatar{padding:0;width:68px;height:68px;border-radius:50%;border:1px solid #dee2e6;background:#1a1a1a center/cover;color:#fff;font-weight:700;font-size:1.5rem;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.pet-info h2{font-size:1.25rem;font-weight:700;color:#1a1a1a}
+.pet-info p{color:#6c757d;font-size:.85rem;margin-top:2px;word-break:break-all}
+.btn-outline{width:100%;margin-top:12px;background:#fff;color:#1a1a1a;border:1px solid #adb5bd;padding:13px;border-radius:14px;font-weight:600;font-size:.95rem}
+
+/* ქვედა ნავიგაცია */
+.bottom-nav{height:70px;flex:none;background:#fff;border-top:1px solid #f1f3f5;display:flex;justify-content:space-around;align-items:center;z-index:1000}
+.nav-item{display:flex;flex-direction:column;align-items:center;gap:4px;color:#6c757d;font-size:.72rem;font-weight:500;border:none;background:none;width:50%;padding:8px 0}
+.nav-item i{font-size:1.2rem}
+.nav-item.active{color:#1a1a1a;font-weight:700}
+/* SOS */
+.sos-banner{position:absolute;top:12px;left:12px;right:12px;z-index:1200;display:flex;align-items:center;gap:10px;background:#c92a2a;color:#fff;border:0;border-radius:14px;padding:12px 14px;font-size:.88rem;font-weight:600;text-align:left;box-shadow:0 4px 14px rgba(0,0,0,.25)}
+.sos-banner.mine{background:#7a1a1a}
+.sheet{position:absolute;left:0;right:0;bottom:0;z-index:1500;background:#fff;border-radius:20px 20px 0 0;padding:20px 20px 24px;box-shadow:0 -6px 24px rgba(0,0,0,.18);display:flex;flex-direction:column;gap:12px;max-height:75%;overflow-y:auto}
+.sheet h3{font-size:1.05rem;color:#1a1a1a}
+.sheet p{font-size:.85rem;color:#495057;line-height:1.4}
+.sheet-head{display:flex;align-items:center;gap:14px}
+.sheet input[type=text]{width:100%;padding:12px 14px;border:1px solid #adb5bd;border-radius:12px;font-size:.92rem;background:#f8f9fa}
+.sheet .btn-outline{margin-top:0}
+.btn-danger{width:100%;background:#c92a2a;color:#fff;border:0;padding:14px;border-radius:14px;font-weight:600;font-size:.95rem}
+.btn-danger:disabled{opacity:.6}
+.sight-list{list-style:none;display:flex;flex-direction:column;gap:6px;font-size:.82rem;color:#212529}
+.pet-marker.sos{border-color:#c92a2a;box-shadow:0 0 0 4px rgba(201,42,42,.35),0 2px 8px rgba(0,0,0,.2);animation:sosPulse 1.6s infinite}
+@keyframes sosPulse{50%{box-shadow:0 0 0 10px rgba(201,42,42,.08),0 2px 8px rgba(0,0,0,.2)}}
+@media (prefers-reduced-motion:reduce){.pet-marker.sos{animation:none}}
+.sight-pin{width:30px;height:30px;border-radius:50%;background:#1a1a1a;color:#fff;border:2px solid #fff;display:flex;align-items:center;justify-content:center;font-size:.8rem}
+button:focus-visible{outline:3px solid #2563eb;outline-offset:2px}
+#toast{position:absolute;left:50%;bottom:90px;transform:translateX(-50%);background:#1a1a1a;color:#fff;padding:10px 16px;border-radius:20px;font-size:.82rem;z-index:3000;max-width:90%;text-align:center;opacity:0;pointer-events:none;transition:opacity .2s}
 #toast.on{opacity:1}
-button:focus-visible,input:focus-visible{outline:3px solid #2563EB;outline-offset:2px}
 </style>
 </head>
 <body>
-<div id="app">
 
-  <section id="login" class="view hidden">
-    <div id="demoBanner" class="demo hidden">დემო რეჟიმი: Supabase ჯერ არ არის მიერთებული. პაროლი: ნებისმიერი (6+ სიმბოლო)</div>
-    <div class="center">
-      <div class="logo"></div>
-      <h1>WoofMap</h1>
-      <p class="sub">იპოვე მეზობელი ცუგოები</p>
-      <label for="email">ელფოსტა</label>
-      <input id="email" type="email" placeholder="name@example.com" autocomplete="email">
-      <label for="password">პაროლი</label>
-      <input id="password" type="password" minlength="6" placeholder="მინიმუმ 6 სიმბოლო" autocomplete="current-password">
-      <button id="loginBtn" class="primary">შესვლა</button>
-      <button id="switchMode" class="link">ახალი ხარ? რეგისტრაცია</button>
+<div class="app-container">
+  <div class="header">
+    <div class="logo"><i class="fa-solid fa-paw"></i> Dogify</div>
+  </div>
+  <div id="demoBanner" class="demo hidden">დემო რეჟიმი: Supabase არ არის მიერთებული. შედით ნებისმიერი ელფოსტით და პაროლით</div>
+
+  <div class="content-area">
+
+    <!-- შესვლა -->
+    <div id="screen-login" class="screen center-screen active">
+      <div class="login-content">
+        <div class="login-logo-area"><i class="fa-solid fa-dog"></i></div>
+        <h1 class="login-title">Dogify</h1>
+        <p class="login-subtitle">იპოვე მეზობელი ცუგოები მარტივად</p>
+        <div class="paws-animation" aria-hidden="true">
+          <i class="fa-solid fa-paw"></i><i class="fa-solid fa-paw"></i><i class="fa-solid fa-paw"></i>
+        </div>
+        <div class="login-form-group">
+          <label for="email">ელფოსტა</label>
+          <input type="email" id="email" placeholder="name@example.com" autocomplete="email">
+        </div>
+        <div class="login-form-group">
+          <label for="password">პაროლი</label>
+          <input type="password" id="password" placeholder="მინიმუმ 6 სიმბოლო" autocomplete="current-password">
+        </div>
+        <button id="loginBtn" class="btn-login">პროფილზე შესვლა</button>
+        <button id="switchMode" class="btn-link">ახალი ხარ? რეგისტრაცია</button>
+      </div>
     </div>
-  </section>
 
-  <section id="dog" class="view hidden">
-    <header><span>შენი ცუგო</span><button id="logout1" class="link">გასვლა</button></header>
-    <div class="center">
-      <button id="avatar" class="avatar" aria-label="ფოტოს არჩევა">+</button>
-      <input id="photo" type="file" accept="image/*" class="hidden">
-      <p class="sub">დააჭირე ფოტოს ასარჩევად</p>
-      <label for="dogName">ძაღლის სახელი</label>
-      <input id="dogName" type="text" placeholder="მაგ. ლუნა" maxlength="30">
-      <button id="saveDog" class="primary">შენახვა</button>
+    <!-- ძაღლის პროფილის შექმნა -->
+    <div id="screen-dog" class="screen center-screen">
+      <div class="login-content">
+        <h1 class="login-title">შენი ცუგო</h1>
+        <p class="login-subtitle">დაამატე ფოტო და სახელი</p>
+        <button id="avatar" class="avatar-pick" aria-label="ფოტოს არჩევა"><i class="fa-solid fa-camera"></i></button>
+        <input id="photo" type="file" accept="image/*" class="hidden">
+        <div class="login-form-group">
+          <label for="dogName">ძაღლის სახელი</label>
+          <input type="text" id="dogName" placeholder="მაგ. ლუნა" maxlength="30">
+        </div>
+        <button id="saveDog" class="btn-login">შენახვა</button>
+        <button id="logout1" class="btn-link">გასვლა</button>
+      </div>
     </div>
-  </section>
 
-  <section id="mapView" class="view hidden">
-    <header><span id="dogTitle"></span><button id="logout2" class="link">გასვლა</button></header>
-    <div id="map"></div>
-    <button id="locate" class="locate" aria-label="ჩემი ადგილმდებარეობა"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#1F2A24" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v4M12 18v4M2 12h4M18 12h4"/></svg></button>
-    <div class="bar">
-      <button id="walkBtn" class="primary">ვსეირნობ</button>
-      <button id="sos" class="sos" aria-label="SOS">SOS</button>
+    <!-- რუკა -->
+    <div id="screen-map" class="screen">
+      <div id="map"></div>
+      <button id="sosBanner" class="sos-banner hidden"><i class="fa-solid fa-triangle-exclamation" aria-hidden="true"></i><span id="sosBannerText"></span></button>
+      <div id="sheet" class="sheet hidden" role="dialog" aria-label="SOS"></div>
+      <button id="locate" class="fab locate" aria-label="ჩემი ადგილმდებარეობა"><i class="fa-solid fa-location-crosshairs"></i></button>
+      <button id="sos" class="fab sos" aria-label="SOS">SOS</button>
+      <div class="map-controls-floating">
+        <button id="walkToggle" class="toggle-switch-container" role="switch" aria-checked="false">
+          <span class="toggle-label"><i class="fa-solid fa-paw"></i><span id="walkText">დაიწყე სეირნობა</span></span>
+          <span class="toggle-track"><span class="toggle-knob"><i class="fa-solid fa-power-off"></i></span></span>
+        </button>
+      </div>
     </div>
-  </section>
 
+    <!-- პროფილი -->
+    <div id="screen-profile" class="screen">
+      <div class="profile-container">
+        <div class="pet-card">
+          <div class="avatar-wrap">
+            <button id="profileImg" class="pet-avatar" aria-label="ფოტოს შეცვლა"></button>
+            <i class="avatar-badge fa-solid fa-camera" aria-hidden="true"></i>
+          </div>
+          <input id="photo2" type="file" accept="image/*" class="hidden">
+          <div class="pet-info">
+            <h2 id="profileName"></h2>
+            <p id="profileEmail"></p>
+          </div>
+        </div>
+        <button id="logout2" class="btn-outline">გასვლა</button>
+      </div>
+    </div>
+  </div>
+
+  <nav class="bottom-nav" id="bottomNav" style="display:none">
+    <button class="nav-item active" data-tab="map"><i class="fa-solid fa-map-location-dot"></i><span>რუკა</span></button>
+    <button class="nav-item" data-tab="profile"><i class="fa-solid fa-user"></i><span>ჩემი პროფილი</span></button>
+  </nav>
+  <div id="toast" role="status"></div>
 </div>
-<div id="toast" role="status"></div>
 
 <script src="https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.0/dist/umd/supabase.js"></script>
 <script>
-/* ====== კონფიგურაცია: Supabase → Project Settings → API ====== */
-const SUPABASE_URL = 'https://oyqcbyygxcpilunvtuwh.supabase.co';   // მაგ. https://abcd1234.supabase.co
-const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im95cWNieXlneGNwaWx1bnZ0dXdoIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTM1MjU5NzMsImV4cCI6MjEwOTEwMTk3M30.HZTiWZchCfMLmLRuF5g6yp9oGOtc6xX_P_I03eg2qBQ';   // anon public key
-/* თუ ორივე ცარიელია, აპი დემო რეჟიმში გაიხსნება */
+/* ====== კონფიგურაცია ====== */
+const SUPABASE_URL = 'https://oyqcbyygxcpilunvtuwh.supabase.co';
+const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im95cWNieXlneGNwaWx1bnZ0dXdoIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTM1MjU5NzMsImV4cCI6MjEwOTEwMTk3M30.HZTiWZchCfMLmLRuF5g6yp9oGOtc6xX_P_I03eg2qBQ';
 
 const DEMO = !SUPABASE_URL || !SUPABASE_KEY;
 const FALLBACK = { lat: 41.7151, lng: 44.8271 }; // თბილისი
@@ -105,7 +209,16 @@ function toast(msg) {
   clearTimeout(toast.t); toast.t = setTimeout(() => t.classList.remove('on'), 3000);
 }
 function show(id) {
-  ['login', 'dog', 'mapView'].forEach(v => $(v).classList.toggle('hidden', v !== id));
+  ['login', 'dog', 'map', 'profile'].forEach(v => $('screen-' + v).classList.toggle('active', v === id));
+  const nav = id === 'map' || id === 'profile';
+  $('bottomNav').style.display = nav ? 'flex' : 'none';
+  document.querySelectorAll('.nav-item').forEach(n => {
+    const on = n.dataset.tab === id;
+    n.classList.toggle('active', on);
+    if (on) n.setAttribute('aria-current', 'page'); else n.removeAttribute('aria-current');
+  });
+  if (id !== 'map') closeSheet();
+  if (id === 'map' && map) setTimeout(() => map.invalidateSize(), 50);
 }
 function distM(a, b) {
   const R = 6371000, r = x => x * Math.PI / 180;
@@ -113,7 +226,7 @@ function distM(a, b) {
   const h = Math.sin(dLa / 2) ** 2 + Math.cos(r(a.lat)) * Math.cos(r(b.lat)) * Math.sin(dLn / 2) ** 2;
   return 2 * R * Math.asin(Math.sqrt(h));
 }
-function compress(file) { // მაქს. 800px, JPEG 75% (~200-300 KB)
+function compress(file) { // მაქს. 800px, JPEG 75%
   return new Promise((res, rej) => {
     const img = new Image(), url = URL.createObjectURL(file);
     img.onload = () => {
@@ -154,6 +267,20 @@ const real = {
     r = await sb.from('dogs').insert({ owner_id: uid, name, photo_path: path });
     if (r.error) throw r.error;
   },
+  async activeSos() { const { data, error } = await sb.rpc('active_sos'); if (error) throw error; return data || []; },
+  async createSos(dogId, lat, lng) { const { error } = await sb.rpc('create_sos', { p_dog_id: dogId, p_lat: lat, p_lng: lng }); if (error) throw error; },
+  async resolveSos(id) { const { error } = await sb.rpc('resolve_sos', { p_id: id }); if (error) throw error; },
+  async reportSighting(id, lat, lng, note) { const { error } = await sb.rpc('report_sighting', { p_alert_id: id, p_lat: lat, p_lng: lng, p_note: note }); if (error) throw error; },
+  async sightings(id) { const { data, error } = await sb.rpc('sightings_for', { p_alert_id: id }); if (error) throw error; return data || []; },
+  async updatePhoto(uid, d, blob) {
+    const path = uid + '/' + Date.now() + '.jpg';
+    let r = await sb.storage.from('dog-photos').upload(path, blob, { contentType: 'image/jpeg' });
+    if (r.error) throw r.error;
+    r = await sb.from('dogs').update({ photo_path: path }).eq('id', d.id);
+    if (r.error) throw r.error;
+    if (d.photo_path) { try { await sb.storage.from('dog-photos').remove([d.photo_path]); } catch (e) { /* ძველი ფოტო დარჩა */ } }
+    return { ...d, photo_path: path };
+  },
   photoUrl(d) { return d.photo_path ? sb.storage.from('dog-photos').getPublicUrl(d.photo_path).data.publicUrl : ''; },
   async upsertWalk(dogId, lat, lng) {
     const { error } = await sb.rpc('upsert_walk', { p_dog_id: dogId, p_lat: lat, p_lng: lng });
@@ -166,7 +293,7 @@ const real = {
   }
 };
 
-/* ---------- API: დემო (ბრაუზერის მეხსიერებაში) ---------- */
+/* ---------- API: დემო ---------- */
 const demoStore = {
   get() { try { return JSON.parse(localStorage.getItem('woofmap_demo') || '{}'); } catch (e) { return {}; } },
   set(v) { try { localStorage.setItem('woofmap_demo', JSON.stringify(v)); } catch (e) { /* სივრცე გავსებულია */ } }
@@ -181,6 +308,23 @@ const demo = {
   async getDog() { return demoStore.get().dog || null; },
   async createDog(uid, name, blob) {
     demoStore.set({ ...demoStore.get(), dog: { id: 'demo-dog', name, photo_url: await toDataUrl(blob) } });
+  },
+  async activeSos(lat, lng) {
+    const s = demoStore.get();
+    const list = [{ id: 'demo-sos-1', dog_id: 'x1', name: 'ბელა', photo_path: '', lat: lat + .006, lng: lng - .004, radius_m: 1000, created_at: new Date(Date.now() - 25 * 60000).toISOString(), is_mine: false }];
+    if (s.sos) list.push(s.sos);
+    return list;
+  },
+  async createSos(dogId, lat, lng) {
+    const s = demoStore.get();
+    demoStore.set({ ...s, sos: { id: 'demo-sos-me', dog_id: dogId, name: s.dog.name, photo_url: s.dog.photo_url, photo_path: '', lat, lng, radius_m: 1000, created_at: new Date().toISOString(), is_mine: true } });
+  },
+  async resolveSos() { const s = demoStore.get(); delete s.sos; demoStore.set(s); },
+  async reportSighting() { },
+  async sightings() { return []; },
+  async updatePhoto(uid, d, blob) {
+    const nd = { ...d, photo_url: await toDataUrl(blob) };
+    demoStore.set({ ...demoStore.get(), dog: nd }); return nd;
   },
   photoUrl(d) { return d.photo_url || ''; },
   async upsertWalk() { },
@@ -203,11 +347,11 @@ let user = null, dog = null, me = null, walking = false;
 let map = null, layer = null, pollTimer = null, watchId = null, wakeLock = null;
 let lastSent = { at: 0, pos: null }, pendingBlob = null, mapStarted = false;
 
-/* ---------- რეგისტრაცია / შესვლა ---------- */
+/* ---------- შესვლა / რეგისტრაცია ---------- */
 let signUpMode = false;
 function setMode(up) {
   signUpMode = up;
-  $('loginBtn').textContent = up ? 'რეგისტრაცია' : 'შესვლა';
+  $('loginBtn').textContent = up ? 'რეგისტრაცია' : 'პროფილზე შესვლა';
   $('switchMode').textContent = up ? 'უკვე გაქვს ანგარიში? შესვლა' : 'ახალი ხარ? რეგისტრაცია';
   $('password').autocomplete = up ? 'new-password' : 'current-password';
 }
@@ -231,14 +375,14 @@ $('switchMode').onclick = () => setMode(!signUpMode);
 const logout = async () => { await stopWalking(); await A.signOut(); };
 $('logout1').onclick = logout; $('logout2').onclick = logout;
 
-/* ---------- ძაღლის პროფილი ---------- */
+/* ---------- ძაღლის პროფილის შექმნა ---------- */
 $('avatar').onclick = () => $('photo').click();
 $('photo').onchange = async e => {
   const f = e.target.files[0]; if (!f) return;
   try {
     pendingBlob = await compress(f);
     $('avatar').style.backgroundImage = 'url("' + URL.createObjectURL(pendingBlob) + '")';
-    $('avatar').textContent = '';
+    $('avatar').innerHTML = '';
   } catch (err) { toast(err.message); }
 };
 $('saveDog').onclick = async () => {
@@ -250,9 +394,28 @@ $('saveDog').onclick = async () => {
   btn.disabled = false;
 };
 
+/* ---------- პროფილის ეკრანი ---------- */
+function fillProfile() {
+  $('profileName').textContent = dog.name;
+  $('profileEmail').textContent = user.email || '';
+  const el = $('profileImg'), url = A.photoUrl(dog);
+  el.style.backgroundImage = url ? 'url("' + url.replace(/"/g, '%22') + '")' : '';
+  el.textContent = url ? '' : dog.name.charAt(0);
+}
+$('profileImg').onclick = () => $('photo2').click();
+$('photo2').onchange = async e => {
+  const f = e.target.files[0]; e.target.value = ''; if (!f) return;
+  try {
+    toast('ფოტო იტვირთება...');
+    dog = await A.updatePhoto(user.id, dog, await compress(f));
+    fillProfile(); drawMe(); toast('ფოტო განახლდა');
+  } catch (err) { toast('შეცდომა: ' + (err.message || err)); }
+};
+document.querySelectorAll('.nav-item').forEach(n => n.onclick = () => show(n.dataset.tab));
+
 /* ---------- რუკა ---------- */
 function pinEl(d) {
-  const el = document.createElement('div'); el.className = 'pin';
+  const el = document.createElement('div'); el.className = 'pet-marker';
   const url = A.photoUrl(d);
   if (url) el.style.backgroundImage = 'url("' + url.replace(/"/g, '%22') + '")';
   else el.textContent = (d.name || '?').charAt(0);
@@ -265,27 +428,26 @@ function drawMe() {
   drawMe.m = drawMe.c = null;
   if (!walking) return;  // სეირნობის გარეშე ჩემი ძაღლი რუკაზე არ ჩანს
   if (me.acc && me.acc < 2000)
-    drawMe.c = L.circle([me.lat, me.lng], { radius: me.acc, weight: 1, color: '#2563EB', fillOpacity: 0.1, interactive: false }).addTo(layer);
-  const el = pinEl(dog);  // ჩემი ძაღლის ფოტო წერტილის ნაცვლად
-  el.classList.add('mine'); if (walking) el.classList.add('walking');
-  drawMe.m = L.marker([me.lat, me.lng], { icon: L.divIcon({ className: '', html: el, iconSize: [48, 48], iconAnchor: [24, 24] }), zIndexOffset: 1000 }).addTo(layer);
+    drawMe.c = L.circle([me.lat, me.lng], { radius: me.acc, weight: 1, color: '#2ecc71', fillOpacity: 0.1, interactive: false }).addTo(layer);
+  const el = pinEl(dog); el.classList.add('mine');
+  drawMe.m = L.marker([me.lat, me.lng], { icon: L.divIcon({ className: '', html: el, iconSize: [46, 46], iconAnchor: [23, 23] }), zIndexOffset: 1000 }).addTo(layer);
 }
+let nearbyGroup = null;
 async function loadNearby() {
   if (!me) return;
   try {
     const list = (await A.nearby(me.lat, me.lng)).filter(d => d.dog_id !== dog.id);
-    if (drawNearby.group) layer.removeLayer(drawNearby.group);
-    drawNearby.group = L.layerGroup().addTo(layer);
+    if (nearbyGroup) layer.removeLayer(nearbyGroup);
+    nearbyGroup = L.layerGroup().addTo(layer);
     list.forEach(d => {
       const pop = document.createElement('div');
       const b = document.createElement('b'); b.textContent = d.name;
       pop.append(b, document.createElement('br'), '~' + (Math.round(d.dist_m / 50) * 50) + ' მ-ში სეირნობს');
-      L.marker([d.lat, d.lng], { icon: L.divIcon({ className: '', html: pinEl(d), iconSize: [48, 48], iconAnchor: [24, 24] }) })
-        .bindPopup(pop).addTo(drawNearby.group);
+      L.marker([d.lat, d.lng], { icon: L.divIcon({ className: '', html: pinEl(d), iconSize: [46, 46], iconAnchor: [23, 23] }) })
+        .bindPopup(pop).addTo(nearbyGroup);
     });
   } catch (e) { console.warn('nearby:', e); }
 }
-function drawNearby() { }
 function getPos() {
   return new Promise(res => {
     if (!navigator.geolocation) return res(null);
@@ -300,7 +462,7 @@ async function startMap() {
     map = L.map('map', { zoomControl: false }).setView([FALLBACK.lat, FALLBACK.lng], 15);
     const OSM = 'https://tile.openstreetmap.org/{z}/{x}/{y}.png';
     const CARTO = 'https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png';
-    // OSM-ის სერვერი ბლოკავს გვერდებს, რომლებიც Referer-ს არ აგზავნიან (მაგ. კომპიუტერზე file:// ფაილი)
+    // OSM ბლოკავს გვერდებს Referer-ის გარეშე (მაგ. file:// ფაილი კომპიუტერზე)
     let useCarto = location.protocol === 'file:';
     const base = L.tileLayer(useCarto ? CARTO : OSM, { maxZoom: 19, subdomains: 'abcd', attribution: '© OpenStreetMap contributors © CARTO' }).addTo(map);
     let tileErrors = 0;
@@ -312,22 +474,26 @@ async function startMap() {
   if (!p) toast('GPS ვერ ვიპოვე. ნაჩვენებია თბილისის ცენტრი');
   me = p || FALLBACK; map.setView([me.lat, me.lng], 16);
   if (p && p.acc > 150) toast('GPS სიზუსტე დაბალია (~' + Math.round(p.acc) + ' მ). გადით ღია ცის ქვეშ');
-  drawMe(); await loadNearby();
-  pollTimer = setInterval(loadNearby, 10000);
+  drawMe(); await loadNearby(); await loadSos();
+  clearInterval(pollTimer); pollTimer = setInterval(() => { loadNearby(); loadSos(); }, 10000);
 }
 
 /* ---------- სეირნობა ---------- */
+function setWalkUI(on) {
+  $('walkToggle').classList.toggle('active', on);
+  $('walkToggle').setAttribute('aria-checked', on ? 'true' : 'false');
+  $('walkText').textContent = on ? 'ვსეირნობთ!' : 'დაიწყე სეირნობა';
+}
 async function sendPos(p) {
   const now = Date.now();
   const moved = lastSent.pos ? distM(lastSent.pos, p) : Infinity;
-  if (moved < 25 && now - lastSent.at < 30000) return; // ბატარეისა და მოთხოვნების დასაზოგად
+  if (moved < 25 && now - lastSent.at < 30000) return;
   lastSent = { at: now, pos: p };
   try { await A.upsertWalk(dog.id, p.lat, p.lng); } catch (e) { console.warn('walk:', e); }
 }
 async function startWalking() {
   if (!navigator.geolocation) { toast('ბრაუზერს GPS არ აქვს'); return; }
-  walking = true; lastSent = { at: 0, pos: null };
-  $('walkBtn').textContent = 'დავამთავრე'; $('walkBtn').classList.add('stop');
+  walking = true; lastSent = { at: 0, pos: null }; setWalkUI(true);
   try { if (navigator.wakeLock) wakeLock = await navigator.wakeLock.request('screen'); } catch (e) { /* არაა კრიტიკული */ }
   sendPos(me);
   watchId = navigator.geolocation.watchPosition(
@@ -338,36 +504,164 @@ async function startWalking() {
 }
 async function stopWalking() {
   if (!walking) return;
-  walking = false;
+  walking = false; setWalkUI(false);
   if (watchId !== null) navigator.geolocation.clearWatch(watchId);
   watchId = null;
   try { if (wakeLock) await wakeLock.release(); } catch (e) { /* არაა კრიტიკული */ }
   wakeLock = null;
-  $('walkBtn').textContent = 'ვსეირნობ'; $('walkBtn').classList.remove('stop');
   try { await A.stopWalk(dog.id); } catch (e) { console.warn(e); }
   drawMe();
 }
-$('walkBtn').onclick = () => walking ? stopWalking() : startWalking();
+$('walkToggle').onclick = () => walking ? stopWalking() : startWalking();
 $('locate').onclick = async () => {
   toast('ვეძებ ლოკაციას...');
   const p = await getPos();
   if (!p) return toast('ლოკაცია ვერ მივიღე. ჩართეთ GPS და მიეცით ნებართვა საიტს');
-  me = p; map.setView([me.lat, me.lng], 17); drawMe(); loadNearby();
+  me = p; map.setView([me.lat, me.lng], 17); drawMe(); loadNearby(); loadSos();
   toast('სიზუსტე ~' + Math.round(p.acc) + ' მ');
 };
-$('sos').onclick = () => toast('SOS ფუნქცია მალე დაემატება');
 window.addEventListener('pagehide', () => { if (walking && !DEMO) A.stopWalk(dog.id); });
+
+/* ---------- SOS ---------- */
+let sosList = [], sosGroup = null, sightGroup = null, seenSos = null;
+const SOS_NEAR_M = 5000; // ბანერი და შეტყობინება ამ რადიუსში
+function fmtDist(m) { return m < 1000 ? Math.max(50, Math.round(m / 50) * 50) + ' მ' : (m / 1000).toFixed(1) + ' კმ'; }
+function ago(ts) {
+  const m = Math.floor((Date.now() - new Date(ts)) / 60000);
+  if (m < 1) return 'ახლახანს';
+  return m < 60 ? m + ' წთ-ის წინ' : Math.floor(m / 60) + ' სთ-ის წინ';
+}
+function el(tag, props, ...kids) { const n = document.createElement(tag); Object.assign(n, props || {}); kids.forEach(k => n.append(k)); return n; }
+function openSheet(...nodes) { const s = $('sheet'); s.replaceChildren(...nodes); s.classList.remove('hidden'); }
+function closeSheet() { $('sheet').classList.add('hidden'); $('sheet').replaceChildren(); }
+const closeBtn = () => el('button', { className: 'btn-outline', textContent: 'დახურვა', onclick: closeSheet });
+document.addEventListener('keydown', e => { if (e.key === 'Escape') closeSheet(); });
+function sosError(e) {
+  const m = (e && e.message) || '', c = (e && e.code) || '';
+  if (c === 'PGRST202' || /Could not find the function/i.test(m)) return 'ბაზაში SOS-ის SQL ჯერ არ არის გაშვებული';
+  if (/sos_one_active|duplicate key/i.test(m)) return 'ამ ძაღლის SOS უკვე აქტიურია';
+  if (/limit reached/i.test(m)) return 'დღეში მაქსიმუმ 2 SOS შეიძლება';
+  if (/too many reports/i.test(m)) return 'ამ განგაშზე მაქსიმუმ 5 შეტყობინება შეიძლება';
+  if (/alert not available/i.test(m)) return 'ეს განგაში უკვე დასრულებულია';
+  return m || 'შეცდომა';
+}
+function drawSos() {
+  if (!layer) return;
+  if (sosGroup) layer.removeLayer(sosGroup);
+  sosGroup = L.layerGroup().addTo(layer);
+  sosList.forEach(a => {
+    L.circle([a.lat, a.lng], { radius: a.radius_m, color: '#c92a2a', weight: 2, fillColor: '#c92a2a', fillOpacity: 0.12, interactive: false }).addTo(sosGroup);
+    const pin = pinEl(a); pin.classList.add('sos');
+    L.marker([a.lat, a.lng], { icon: L.divIcon({ className: '', html: pin, iconSize: [46, 46], iconAnchor: [23, 23] }), zIndexOffset: 900, title: a.name })
+      .on('click', () => openAlert(a)).addTo(sosGroup);
+  });
+}
+async function drawSightings() {
+  if (sightGroup) { layer.removeLayer(sightGroup); sightGroup = null; }
+  const mine = sosList.find(a => a.is_mine); if (!mine) return;
+  try {
+    const list = await A.sightings(mine.id);
+    sightGroup = L.layerGroup().addTo(layer);
+    list.forEach(s => {
+      const pin = el('div', { className: 'sight-pin' }); pin.innerHTML = '<i class="fa-solid fa-eye"></i>';
+      const pop = el('div', { textContent: ago(s.created_at) + ': ' + (s.note || 'ნახეს') });
+      L.marker([s.lat, s.lng], { icon: L.divIcon({ className: '', html: pin, iconSize: [30, 30], iconAnchor: [15, 15] }) }).bindPopup(pop).addTo(sightGroup);
+    });
+  } catch (e) { console.warn('sightings:', e); }
+}
+function updateBanner() {
+  const mine = sosList.find(a => a.is_mine);
+  let target = null, text = '';
+  if (mine) { target = mine; text = 'შენი SOS აქტიურია: ' + mine.name; }
+  else if (me) {
+    const near = sosList.map(a => ({ a, d: distM(me, a) })).filter(x => x.d <= SOS_NEAR_M).sort((x, y) => x.d - y.d);
+    if (near.length) { target = near[0].a; text = target.name + ' დაიკარგა ' + fmtDist(near[0].d) + '-ში' + (near.length > 1 ? ' (+' + (near.length - 1) + ')' : ''); }
+  }
+  const b = $('sosBanner');
+  b.classList.toggle('hidden', !target); b.classList.toggle('mine', !!mine);
+  $('sosBannerText').textContent = text;
+  b.onclick = () => { if (target) { map.setView([target.lat, target.lng], 14); openAlert(target); } };
+}
+function notifyNew() {
+  const ids = new Set(sosList.map(a => a.id));
+  if (seenSos === null) { seenSos = ids; return; }
+  sosList.forEach(a => {
+    if (seenSos.has(a.id) || a.is_mine || !me) return;
+    const d = distM(me, a);
+    if (d <= SOS_NEAR_M) { toast(a.name + ' დაიკარგა ' + fmtDist(d) + '-ში'); if (navigator.vibrate) navigator.vibrate([200, 100, 200]); }
+  });
+  seenSos = ids;
+}
+async function loadSos() {
+  try { sosList = await A.activeSos(me ? me.lat : FALLBACK.lat, me ? me.lng : FALLBACK.lng); }
+  catch (e) { console.warn('sos:', e); return; }
+  drawSos(); updateBanner(); notifyNew(); drawSightings();
+}
+async function openAlert(a) {
+  const d = me ? distM(me, a) : null;
+  const head = el('div', { className: 'sheet-head' }, pinEl(a),
+    el('div', {},
+      el('h3', { textContent: a.is_mine ? a.name + ': შენი SOS' : a.name + ' დაიკარგა' }),
+      el('p', { textContent: ago(a.created_at) + (!a.is_mine && d !== null ? ' · ' + fmtDist(d) + '-ში' : '') })));
+  if (a.is_mine) {
+    let list = [];
+    try { list = await A.sightings(a.id); } catch (e) { /* არაა კრიტიკული */ }
+    const ul = el('ul', { className: 'sight-list' }, ...list.slice(0, 5).map(s => el('li', { textContent: ago(s.created_at) + ': ' + (s.note || 'ნახეს') })));
+    const found = el('button', {
+      className: 'btn-login', textContent: 'ვიპოვე',
+      onclick: async () => {
+        if (!confirm('დარწმუნებული ხართ, რომ ' + a.name + ' იპოვეთ?')) return;
+        try { await A.resolveSos(a.id); closeSheet(); toast('მიხარია, რომ იპოვეთ!'); await loadSos(); }
+        catch (e) { toast(sosError(e)); }
+      }
+    });
+    openSheet(head, el('p', { textContent: list.length ? 'ნახვის შეტყობინებები: ' + list.length : 'ჯერ არავის უნახავს. განგაში აქტიურია 24 საათი.' }), ul, found, closeBtn());
+  } else {
+    const note = el('input', { type: 'text', maxLength: 140, placeholder: 'სად და როდის ნახეთ? (არასავალდებულო)' });
+    note.setAttribute('aria-label', 'შენიშვნა');
+    const send = el('button', {
+      className: 'btn-danger', textContent: 'ვნახე ეს ძაღლი',
+      onclick: async () => {
+        send.disabled = true;
+        try {
+          const p = (await getPos()) || (me && me.acc !== undefined ? me : null);
+          if (!p) throw new Error('ლოკაცია ვერ მივიღე. ჩართეთ GPS');
+          await A.reportSighting(a.id, p.lat, p.lng, note.value.trim());
+          closeSheet(); toast('გადაეცა პატრონს. გმადლობთ!');
+        } catch (e) { toast(sosError(e)); send.disabled = false; }
+      }
+    });
+    openSheet(head, note, send, closeBtn());
+  }
+}
+function openSosConfirm() {
+  openSheet(
+    el('h3', { textContent: 'ნამდვილად დაიკარგა ' + dog.name + '?' }),
+    el('p', { textContent: 'მთელ რუკაზე გამოჩნდება წითელი საძიებო ზონა (1 კმ), ხოლო 5 კმ-ში მყოფ მომხმარებლებს განგაში გამოუჩნდებათ. ზონის ცენტრი თქვენი ახლანდელი ადგილია.' }),
+    el('button', { className: 'btn-danger', textContent: 'SOS-ის გააქტიურება', onclick: activateSos }),
+    closeBtn());
+}
+async function activateSos() {
+  closeSheet(); toast('ვადგენ ლოკაციას...');
+  const p = await getPos();
+  if (!p) return toast('SOS-ისთვის ლოკაცია გჭირდებათ. ჩართეთ GPS და მიეცით ნებართვა');
+  try {
+    await A.createSos(dog.id, p.lat, p.lng);
+    me = p; await loadSos(); map.setView([p.lat, p.lng], 14); toast('SOS გააქტიურდა');
+  } catch (e) { toast(sosError(e)); }
+}
+$('sos').onclick = () => { const mine = sosList.find(a => a.is_mine); mine ? openAlert(mine) : openSosConfirm(); };
 
 /* ---------- მარშრუტიზაცია ---------- */
 async function route() {
   try {
     user = await A.user();
-    clearInterval(pollTimer); mapStarted = false;
+    clearInterval(pollTimer); mapStarted = false; seenSos = null; sosList = []; closeSheet();
     if (!user) { dog = null; $('password').value = ''; return show('login'); }
     dog = await A.getDog(user.id);
     if (!dog) return show('dog');
-    $('dogTitle').textContent = '🐾 ' + dog.name;
-    show('mapView'); await startMap();
+    fillProfile();
+    show('map'); await startMap();
   } catch (e) { toast('შეცდომა: ' + (e.message || e)); show('login'); }
 }
 if (DEMO) $('demoBanner').classList.remove('hidden');
