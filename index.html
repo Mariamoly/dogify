@@ -98,6 +98,11 @@ button{cursor:pointer}
 @keyframes sosPulse{50%{box-shadow:0 0 0 10px rgba(201,42,42,.08),0 2px 8px rgba(0,0,0,.2)}}
 @media (prefers-reduced-motion:reduce){.pet-marker.sos{animation:none}}
 .sight-pin{width:30px;height:30px;border-radius:50%;background:#1a1a1a;color:#fff;border:2px solid #fff;display:flex;align-items:center;justify-content:center;font-size:.8rem}
+
+.stray-photo{width:100%;height:160px;border-radius:14px;border:2px dashed #adb5bd;background:#f8f9fa center/cover;color:#6c757d;font-size:2rem;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.stray-photo.big{height:200px;border:1px solid #dee2e6}
+.tel-link{font-weight:600;color:#1a1a1a;font-size:.9rem}
+.pet-marker.stray{border-color:#e8590c;box-shadow:0 0 0 4px rgba(232,89,12,.3),0 2px 8px rgba(0,0,0,.2)}
 button:focus-visible{outline:3px solid #2563eb;outline-offset:2px}
 #toast{position:absolute;left:50%;bottom:90px;transform:translateX(-50%);background:#1a1a1a;color:#fff;padding:10px 16px;border-radius:20px;font-size:.82rem;z-index:3000;max-width:90%;text-align:center;opacity:0;pointer-events:none;transition:opacity .2s}
 #toast.on{opacity:1}
@@ -130,7 +135,12 @@ button:focus-visible{outline:3px solid #2563eb;outline-offset:2px}
           <label for="password">პაროლი</label>
           <input type="password" id="password" placeholder="მინიმუმ 6 სიმბოლო" autocomplete="current-password">
         </div>
+        <div id="codeGroup" class="login-form-group hidden">
+          <label for="code">დადასტურების კოდი</label>
+          <input type="text" id="code" inputmode="numeric" maxlength="10" placeholder="კოდი მეილიდან" autocomplete="one-time-code">
+        </div>
         <button id="loginBtn" class="btn-login">პროფილზე შესვლა</button>
+        <button id="resendBtn" class="btn-link hidden">კოდის თავიდან გაგზავნა</button>
         <button id="switchMode" class="btn-link">ახალი ხარ? რეგისტრაცია</button>
       </div>
     </div>
@@ -250,11 +260,13 @@ const real = {
   async user() { const { data } = await sb.auth.getSession(); return data.session ? data.session.user : null; },
   onAuth(cb) { sb.auth.onAuthStateChange(ev => { if (ev === 'SIGNED_IN' || ev === 'SIGNED_OUT') cb(); }); },
   async signIn(email, pw) { const { error } = await sb.auth.signInWithPassword({ email, password: pw }); if (error) throw error; },
-  async signUp(email, pw) {
+  async signUp(email, pw) {  // true = უკვე შესულია (მეილის დადასტურება გამორთულია)
     const { data, error } = await sb.auth.signUp({ email, password: pw });
     if (error) throw error;
-    if (!data.session) throw new Error('ანგარიში შეიქმნა, მაგრამ Supabase მეილის დადასტურებას ითხოვს. გამორთეთ "Confirm email" (Authentication → Sign In / Providers → Email)');
+    return !!data.session;
   },
+  async verifySignup(email, token) { const { error } = await sb.auth.verifyOtp({ email, token, type: 'signup' }); if (error) throw error; },
+  async resendCode(email) { const { error } = await sb.auth.resend({ type: 'signup', email }); if (error) throw error; },
   async signOut() { await sb.auth.signOut(); },
   async getDog(uid) {
     const { data, error } = await sb.from('dogs').select('*').eq('owner_id', uid).limit(1);
@@ -267,6 +279,17 @@ const real = {
     r = await sb.from('dogs').insert({ owner_id: uid, name, photo_path: path });
     if (r.error) throw r.error;
   },
+  async uploadStrayPhoto(uid, blob) {
+    const path = uid + '/stray_' + Date.now() + '.jpg';
+    const r = await sb.storage.from('dog-photos').upload(path, blob, { contentType: 'image/jpeg' });
+    if (r.error) throw r.error; return path;
+  },
+  async reportStray(path, lat, lng, note, contact) {
+    const { error } = await sb.rpc('report_stray', { p_photo_path: path, p_lat: lat, p_lng: lng, p_note: note, p_contact: contact });
+    if (error) throw error;
+  },
+  async activeStrays() { const { data, error } = await sb.rpc('active_strays'); if (error) throw error; return data || []; },
+  async resolveStray(id) { const { error } = await sb.rpc('resolve_stray', { p_id: id }); if (error) throw error; },
   async activeSos() { const { data, error } = await sb.rpc('active_sos'); if (error) throw error; return data || []; },
   async createSos(dogId, lat, lng) { const { error } = await sb.rpc('create_sos', { p_dog_id: dogId, p_lat: lat, p_lng: lng }); if (error) throw error; },
   async resolveSos(id) { const { error } = await sb.rpc('resolve_sos', { p_id: id }); if (error) throw error; },
@@ -303,12 +326,25 @@ const demo = {
   async user() { const s = demoStore.get(); return s.email ? { id: 'demo', email: s.email } : null; },
   onAuth(cb) { demoListeners.push(cb); },
   async signIn(email) { demoStore.set({ ...demoStore.get(), email }); demoListeners.forEach(f => f()); },
-  async signUp(email) { return demo.signIn(email); },
+  async signUp(email) { await demo.signIn(email); return true; },
+  async verifySignup() { },
+  async resendCode() { },
   async signOut() { const s = demoStore.get(); delete s.email; demoStore.set(s); demoListeners.forEach(f => f()); },
   async getDog() { return demoStore.get().dog || null; },
   async createDog(uid, name, blob) {
     demoStore.set({ ...demoStore.get(), dog: { id: 'demo-dog', name, photo_url: await toDataUrl(blob) } });
   },
+  async uploadStrayPhoto(uid, blob) { return toDataUrl(blob); },
+  async reportStray(photo, lat, lng, note, contact) {
+    const st = demoStore.get(), list = st.strays || [];
+    list.push({ id: 'demo-stray-' + Date.now(), photo_url: photo, photo_path: '', lat, lng, note, contact, created_at: new Date().toISOString(), is_mine: true });
+    demoStore.set({ ...st, strays: list });
+  },
+  async activeStrays(lat, lng) {
+    const st = demoStore.get();
+    return [{ id: 'demo-stray-0', photo_path: '', lat: lat - .003, lng: lng + .002, note: 'ყავისფერი, მცირე ზომის, ყელსაბამით', contact: '', created_at: new Date(Date.now() - 12 * 60000).toISOString(), is_mine: false }, ...(st.strays || [])];
+  },
+  async resolveStray(id) { const st = demoStore.get(); st.strays = (st.strays || []).filter(x => x.id !== id); demoStore.set(st); },
   async activeSos(lat, lng) {
     const s = demoStore.get();
     const list = [{ id: 'demo-sos-1', dog_id: 'x1', name: 'ბელა', photo_path: '', lat: lat + .006, lng: lng - .004, radius_m: 1000, created_at: new Date(Date.now() - 25 * 60000).toISOString(), is_mine: false }];
@@ -348,30 +384,61 @@ let map = null, layer = null, pollTimer = null, watchId = null, wakeLock = null;
 let lastSent = { at: 0, pos: null }, pendingBlob = null, mapStarted = false;
 
 /* ---------- შესვლა / რეგისტრაცია ---------- */
-let signUpMode = false;
+let signUpMode = false, codeStep = false;
 function setMode(up) {
   signUpMode = up;
+  if (codeStep) return;
   $('loginBtn').textContent = up ? 'რეგისტრაცია' : 'პროფილზე შესვლა';
   $('switchMode').textContent = up ? 'უკვე გაქვს ანგარიში? შესვლა' : 'ახალი ხარ? რეგისტრაცია';
   $('password').autocomplete = up ? 'new-password' : 'current-password';
+}
+function setCodeStep(on) {
+  codeStep = on;
+  $('codeGroup').classList.toggle('hidden', !on);
+  $('resendBtn').classList.toggle('hidden', !on);
+  $('email').disabled = on; $('password').disabled = on;
+  if (on) { $('loginBtn').textContent = 'დადასტურება'; $('switchMode').textContent = 'უკან'; $('code').focus(); }
+  else { $('code').value = ''; setMode(signUpMode); }
 }
 function authError(e) {
   const m = (e && e.message) || '';
   if (/Invalid login/i.test(m)) return 'არასწორი ელფოსტა ან პაროლი';
   if (/already registered/i.test(m)) return 'ეს ელფოსტა უკვე რეგისტრირებულია. გადადით შესვლაზე';
-  if (/rate limit/i.test(m)) return 'ძალიან ბევრი მცდელობა. სცადეთ ცოტა ხანში';
+  if (/expired|invalid/i.test(m) && codeStep) return 'კოდი არასწორია ან ვადა გაუვიდა';
+  if (/rate limit|seconds/i.test(m)) return 'ძალიან ბევრი მცდელობა. სცადეთ ცოტა ხანში';
   return m || 'შეცდომა';
 }
 $('loginBtn').onclick = async () => {
   const email = $('email').value.trim(), pw = $('password').value, btn = $('loginBtn');
+  if (codeStep) {
+    const code = $('code').value.trim();
+    if (code.length < 6) return toast('ჩაწერეთ მეილზე მიღებული კოდი');
+    btn.disabled = true;
+    try { await A.verifySignup(email, code); } // შესვლას route() თავისით გააგრძელებს
+    catch (e) { toast(authError(e)); }
+    btn.disabled = false; return;
+  }
   if (!email.includes('@')) return toast('ჩაწერეთ სწორი ელფოსტა');
   if (pw.length < 6) return toast('პაროლი მინიმუმ 6 სიმბოლო უნდა იყოს');
   btn.disabled = true;
-  try { await (signUpMode ? A.signUp(email, pw) : A.signIn(email, pw)); }
-  catch (e) { toast(authError(e)); }
+  try {
+    if (signUpMode) {
+      const signedIn = await A.signUp(email, pw);
+      if (!signedIn) { setCodeStep(true); toast('კოდი გამოგიგზავნეთ მეილზე'); }
+    } else await A.signIn(email, pw);
+  } catch (e) {
+    if (/not confirmed/i.test((e && e.message) || '')) { // ელფოსტა ჯერ არ დაუდასტურებია
+      try { await A.resendCode(email); setCodeStep(true); toast('ჯერ დაადასტურეთ ელფოსტა. კოდი გამოგიგზავნეთ'); }
+      catch (e2) { toast(authError(e2)); }
+    } else toast(authError(e));
+  }
   btn.disabled = false;
 };
-$('switchMode').onclick = () => setMode(!signUpMode);
+$('resendBtn').onclick = async () => {
+  try { await A.resendCode($('email').value.trim()); toast('კოდი თავიდან გაიგზავნა'); }
+  catch (e) { toast(authError(e)); }
+};
+$('switchMode').onclick = () => codeStep ? setCodeStep(false) : setMode(!signUpMode);
 const logout = async () => { await stopWalking(); await A.signOut(); };
 $('logout1').onclick = logout; $('logout2').onclick = logout;
 
@@ -523,7 +590,8 @@ $('locate').onclick = async () => {
 window.addEventListener('pagehide', () => { if (walking && !DEMO) A.stopWalk(dog.id); });
 
 /* ---------- SOS ---------- */
-let sosList = [], sosGroup = null, sightGroup = null, seenSos = null;
+let sosList = [], strayList = [], sosGroup = null, strayGroup = null, sightGroup = null, seenSos = null;
+let strayDraft = { blob: null, url: '', note: '', contact: '', loc: null }, picking = false, pickMarker = null;
 const SOS_NEAR_M = 5000; // ბანერი და შეტყობინება ამ რადიუსში
 function fmtDist(m) { return m < 1000 ? Math.max(50, Math.round(m / 50) * 50) + ' მ' : (m / 1000).toFixed(1) + ' კმ'; }
 function ago(ts) {
@@ -532,7 +600,7 @@ function ago(ts) {
   return m < 60 ? m + ' წთ-ის წინ' : Math.floor(m / 60) + ' სთ-ის წინ';
 }
 function el(tag, props, ...kids) { const n = document.createElement(tag); Object.assign(n, props || {}); kids.forEach(k => n.append(k)); return n; }
-function openSheet(...nodes) { const s = $('sheet'); s.replaceChildren(...nodes); s.classList.remove('hidden'); }
+function openSheet(...nodes) { picking = false; const s = $('sheet'); s.replaceChildren(...nodes); s.classList.remove('hidden'); }
 function closeSheet() { $('sheet').classList.add('hidden'); $('sheet').replaceChildren(); }
 const closeBtn = () => el('button', { className: 'btn-outline', textContent: 'დახურვა', onclick: closeSheet });
 document.addEventListener('keydown', e => { if (e.key === 'Escape') closeSheet(); });
@@ -542,6 +610,7 @@ function sosError(e) {
   if (/sos_one_active|duplicate key/i.test(m)) return 'ამ ძაღლის SOS უკვე აქტიურია';
   if (/limit reached/i.test(m)) return 'დღეში მაქსიმუმ 2 SOS შეიძლება';
   if (/too many reports/i.test(m)) return 'ამ განგაშზე მაქსიმუმ 5 შეტყობინება შეიძლება';
+  if (/stray limit/i.test(m)) return 'დღეში მაქსიმუმ 5 ძაღლის დამატება შეიძლება';
   if (/alert not available/i.test(m)) return 'ეს განგაში უკვე დასრულებულია';
   return m || 'შეცდომა';
 }
@@ -569,33 +638,135 @@ async function drawSightings() {
     });
   } catch (e) { console.warn('sightings:', e); }
 }
+function drawStrays() {
+  if (!layer) return;
+  if (strayGroup) layer.removeLayer(strayGroup);
+  strayGroup = L.layerGroup().addTo(layer);
+  strayList.forEach(x => {
+    const pin = pinEl(x); pin.classList.add('stray');
+    L.marker([x.lat, x.lng], { icon: L.divIcon({ className: '', html: pin, iconSize: [46, 46], iconAnchor: [23, 23] }), zIndexOffset: 800, title: 'ნანახი დაკარგული ძაღლი' })
+      .on('click', () => openStray(x)).addTo(strayGroup);
+  });
+}
+const allItems = () => [...sosList.map(a => ({ kind: 'sos', a })), ...strayList.map(a => ({ kind: 'stray', a }))];
+const openItem = t => t.kind === 'sos' ? openAlert(t.a) : openStray(t.a);
 function updateBanner() {
   const mine = sosList.find(a => a.is_mine);
   let target = null, text = '';
-  if (mine) { target = mine; text = 'შენი SOS აქტიურია: ' + mine.name; }
+  if (mine) { target = { kind: 'sos', a: mine }; text = 'შენი SOS აქტიურია: ' + mine.name; }
   else if (me) {
-    const near = sosList.map(a => ({ a, d: distM(me, a) })).filter(x => x.d <= SOS_NEAR_M).sort((x, y) => x.d - y.d);
-    if (near.length) { target = near[0].a; text = target.name + ' დაიკარგა ' + fmtDist(near[0].d) + '-ში' + (near.length > 1 ? ' (+' + (near.length - 1) + ')' : ''); }
+    const near = allItems().filter(x => !x.a.is_mine).map(x => ({ ...x, d: distM(me, x.a) }))
+      .filter(x => x.d <= SOS_NEAR_M).sort((x, y) => x.d - y.d);
+    if (near.length) {
+      const n = near[0]; target = n;
+      text = (n.kind === 'sos' ? n.a.name + ' დაიკარგა ' : 'ნანახია დაკარგული ძაღლი ') + fmtDist(n.d) + '-ში' + (near.length > 1 ? ' (+' + (near.length - 1) + ')' : '');
+    }
   }
   const b = $('sosBanner');
   b.classList.toggle('hidden', !target); b.classList.toggle('mine', !!mine);
   $('sosBannerText').textContent = text;
-  b.onclick = () => { if (target) { map.setView([target.lat, target.lng], 14); openAlert(target); } };
+  b.onclick = () => { if (target) { map.setView([target.a.lat, target.a.lng], 15); openItem(target); } };
 }
 function notifyNew() {
-  const ids = new Set(sosList.map(a => a.id));
+  const ids = new Set(allItems().map(x => x.kind + ':' + x.a.id));
   if (seenSos === null) { seenSos = ids; return; }
-  sosList.forEach(a => {
-    if (seenSos.has(a.id) || a.is_mine || !me) return;
-    const d = distM(me, a);
-    if (d <= SOS_NEAR_M) { toast(a.name + ' დაიკარგა ' + fmtDist(d) + '-ში'); if (navigator.vibrate) navigator.vibrate([200, 100, 200]); }
+  allItems().forEach(x => {
+    if (seenSos.has(x.kind + ':' + x.a.id) || x.a.is_mine || !me) return;
+    const d = distM(me, x.a);
+    if (d <= SOS_NEAR_M) {
+      toast((x.kind === 'sos' ? x.a.name + ' დაიკარგა ' : 'ნანახია დაკარგული ძაღლი ') + fmtDist(d) + '-ში');
+      if (navigator.vibrate) navigator.vibrate([200, 100, 200]);
+    }
   });
   seenSos = ids;
 }
 async function loadSos() {
-  try { sosList = await A.activeSos(me ? me.lat : FALLBACK.lat, me ? me.lng : FALLBACK.lng); }
-  catch (e) { console.warn('sos:', e); return; }
-  drawSos(); updateBanner(); notifyNew(); drawSightings();
+  const at = me || FALLBACK;
+  try { sosList = await A.activeSos(at.lat, at.lng); } catch (e) { console.warn('sos:', e); }
+  try { strayList = await A.activeStrays(at.lat, at.lng); } catch (e) { console.warn('stray:', e); strayList = []; }
+  drawSos(); drawStrays(); updateBanner(); notifyNew(); drawSightings();
+}
+function openStray(x) {
+  const d = me ? distM(me, x) : null;
+  const ph = el('div', { className: 'stray-photo big' });
+  const u = A.photoUrl(x); if (u) ph.style.backgroundImage = 'url("' + u.replace(/"/g, '%22') + '")';
+  const nodes = [
+    el('h3', { textContent: x.is_mine ? 'შენ დაამატე ეს ძაღლი' : 'ნანახია დაკარგული ძაღლი' }), ph,
+    el('p', { textContent: ago(x.created_at) + (d !== null && !x.is_mine ? ' · ' + fmtDist(d) + '-ში' : '') })];
+  if (x.note) nodes.push(el('p', { textContent: x.note }));
+  if (x.contact) {
+    const digits = x.contact.replace(/[^\d+]/g, '');
+    nodes.push(digits.length >= 7 ? el('a', { href: 'tel:' + digits, className: 'tel-link', textContent: 'კონტაქტი: ' + x.contact }) : el('p', { textContent: 'კონტაქტი: ' + x.contact }));
+  }
+  if (x.is_mine) nodes.push(el('button', {
+    className: 'btn-login', textContent: 'აღარ არის აქ / პატრონს ჩაბარდა',
+    onclick: async () => {
+      if (!confirm('დავხუროთ ეს განცხადება?')) return;
+      try { await A.resolveStray(x.id); closeSheet(); await loadSos(); toast('დაიხურა'); } catch (e) { toast(sosError(e)); }
+    }
+  }));
+  nodes.push(closeBtn());
+  openSheet(...nodes);
+}
+function clearPick() { if (pickMarker) { layer.removeLayer(pickMarker); pickMarker = null; } }
+function startPick() {
+  closeSheet(); toast('დააჭირეთ რუკას ადგილის ასარჩევად'); picking = true;
+  map.once('click', e => {
+    if (!picking) return; picking = false;
+    strayDraft.loc = { lat: e.latlng.lat, lng: e.latlng.lng };
+    clearPick(); pickMarker = L.circleMarker(e.latlng, { radius: 9, color: '#fff', weight: 3, fillColor: '#e8590c', fillOpacity: 1 }).addTo(layer);
+    openStrayForm();
+  });
+}
+function openStrayForm() {
+  const d = strayDraft;
+  const ph = el('button', { className: 'stray-photo', type: 'button' });
+  ph.setAttribute('aria-label', 'ფოტოს გადაღება ან არჩევა');
+  if (d.blob) ph.style.backgroundImage = 'url("' + d.url + '")'; else ph.innerHTML = '<i class="fa-solid fa-camera"></i>';
+  const inp = el('input', { type: 'file', accept: 'image/*', className: 'hidden' });
+  ph.onclick = () => inp.click();
+  inp.onchange = async e => {
+    const f = e.target.files[0]; if (!f) return;
+    try { d.blob = await compress(f); d.url = URL.createObjectURL(d.blob); openStrayForm(); } catch (err) { toast(err.message); }
+  };
+  const note = el('input', { type: 'text', maxLength: 200, placeholder: 'მოკლე აღწერა (ფერი, ჯიში, სად ნახეთ)', value: d.note });
+  note.setAttribute('aria-label', 'აღწერა'); note.oninput = () => { d.note = note.value; };
+  const contact = el('input', { type: 'text', maxLength: 40, placeholder: 'კონტაქტი, ტელეფონი (არასავალდებულო)', value: d.contact });
+  contact.setAttribute('aria-label', 'კონტაქტი'); contact.oninput = () => { d.contact = contact.value; };
+  openSheet(
+    el('h3', { textContent: 'ნანახი დაკარგული ძაღლი' }), ph, inp, note, contact,
+    el('p', { textContent: d.loc ? 'ადგილი: ამორჩეულია რუკაზე' : 'ადგილი: თქვენი ახლანდელი ლოკაცია' }),
+    el('button', { className: 'btn-outline', textContent: 'რუკაზე ადგილის არჩევა', onclick: startPick }),
+    el('button', { className: 'btn-danger', textContent: 'რუკაზე გამოქვეყნება', onclick: e => publishStray(e.currentTarget) }),
+    closeBtn());
+}
+async function publishStray(btn) {
+  const d = strayDraft;
+  if (!d.blob) return toast('დაამატეთ ძაღლის ფოტო');
+  btn.disabled = true;
+  try {
+    let loc = d.loc;
+    if (!loc) {
+      toast('ვადგენ ლოკაციას...');
+      const p = await getPos();
+      if (!p) throw new Error('ლოკაცია ვერ მივიღე. ჩართეთ GPS ან აირჩიეთ ადგილი რუკაზე');
+      loc = { lat: p.lat, lng: p.lng };
+    }
+    const path = await A.uploadStrayPhoto(user.id, d.blob);
+    await A.reportStray(path, loc.lat, loc.lng, d.note.trim(), d.contact.trim());
+    strayDraft = { blob: null, url: '', note: '', contact: '', loc: null };
+    clearPick(); closeSheet(); await loadSos(); map.setView([loc.lat, loc.lng], 16);
+    toast('დაემატა რუკაზე. გმადლობთ!');
+  } catch (e) { toast(sosError(e)); btn.disabled = false; }
+}
+function openSosMenu() {
+  const mine = sosList.find(a => a.is_mine);
+  openSheet(
+    el('h3', { textContent: 'SOS' }),
+    el('p', { textContent: 'დაეხმარეთ დაკარგულ ცუგოს: გადაუღეთ ფოტო და მონიშნეთ ადგილი რუკაზე, რომ პატრონმა იპოვოს.' }),
+    el('button', { className: 'btn-danger', textContent: 'ვნახე დაკარგული ძაღლი', onclick: openStrayForm }),
+    el('button', { className: 'btn-outline', textContent: mine ? 'ჩემი SOS (აქტიურია)' : 'ჩემი ძაღლი დაიკარგა', onclick: () => mine ? openAlert(mine) : openSosConfirm() }),
+    closeBtn());
 }
 async function openAlert(a) {
   const d = me ? distM(me, a) : null;
@@ -650,14 +821,14 @@ async function activateSos() {
     me = p; await loadSos(); map.setView([p.lat, p.lng], 14); toast('SOS გააქტიურდა');
   } catch (e) { toast(sosError(e)); }
 }
-$('sos').onclick = () => { const mine = sosList.find(a => a.is_mine); mine ? openAlert(mine) : openSosConfirm(); };
+$('sos').onclick = openSosMenu;
 
 /* ---------- მარშრუტიზაცია ---------- */
 async function route() {
   try {
     user = await A.user();
-    clearInterval(pollTimer); mapStarted = false; seenSos = null; sosList = []; closeSheet();
-    if (!user) { dog = null; $('password').value = ''; return show('login'); }
+    clearInterval(pollTimer); mapStarted = false; seenSos = null; sosList = []; strayList = []; closeSheet();
+    if (!user) { dog = null; $('password').value = ''; setCodeStep(false); return show('login'); }
     dog = await A.getDog(user.id);
     if (!dog) return show('dog');
     fillProfile();
