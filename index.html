@@ -398,11 +398,11 @@ button:focus-visible{outline:3px solid #2563eb;outline-offset:2px}
       </ul>
       <h3>როგორ ვამუშავებთ ლოკაციას</h3>
       <ul>
-        <li>სეირნობისას ზუსტი ადგილი სერვერზე ინახება დამრგვალებული სახით (დაახლოებით 300 მ), SOS-ისთვის დაახლოებით 100 მ, ნანახი ძაღლისთვის დაახლოებით 50 მ.</li>
-        <li>სეირნობისას მარშრუტის მიახლოებითი წერტილები ინახება მაქსიმუმ 2 საათით. სეირნობის დასრულების შემდეგ ბოლო დამრგვალებული ადგილი ბაზაში რჩება დამალული სახით და სხვა მომხმარებლებს არ ჩანს.</li>
+        <li>სეირნობისას შენი რეალური ადგილმდებარეობა ინახება და სხვა მომხმარებლებს ეჩვენებათ, სანამ სეირნობა ჩართულია. SOS-ისთვის ადგილი დამრგვალდება დაახლოებით 100 მ-მდე, ნანახი ძაღლისთვის დაახლოებით 50 მ-მდე.</li>
+        <li>სეირნობის დასრულების შემდეგ ბოლო ადგილი ბაზაში რჩება დამალული სახით და სხვა მომხმარებლებს არ ჩანს.</li>
       </ul>
       <h3>ვის ჩანს შენი მონაცემები</h3>
-      <p>სეირნობისას აქტიური ძაღლის სახელი, ფოტო, მიახლოებითი ადგილი და ბოლო დაახლოებით 60 წუთის მიახლოებითი მარშრუტი ჩანს Dogify-ის ყველა შესულ მომხმარებელს რუკაზე. SOS და ნანახი ძაღლის განცხადებები (ფოტოთი, ტექსტით და მითითებული კონტაქტით) ჩანს ყველა შესულ მომხმარებელს. შენი ელფოსტა სხვებს არ ეჩვენება.</p>
+      <p>სეირნობისას აქტიური ძაღლის სახელი, ფოტო და რეალური ადგილმდებარეობა ჩანს Dogify-ის ყველა შესულ მომხმარებელს რუკაზე. SOS და ნანახი ძაღლის განცხადებები (ფოტოთი, ტექსტით და მითითებული კონტაქტით) ჩანს ყველა შესულ მომხმარებელს. შენი ელფოსტა სხვებს არ ეჩვენება.</p>
       <h3>სად ინახება</h3>
       <p>მონაცემები ინახება Supabase-ის ღრუბლოვან სერვისზე. რუკის სურათებს ვიღებთ OpenStreetMap-ისა და CARTO-ს სერვერებიდან, ამიტომ ისინი შეიძლება ხედავდნენ შენს IP-მისამართს და რუკის იმ ნაწილს, რომელსაც უყურებ. სათაურის ფონტები იტვირთება Google Fonts-იდან.</p>
       <h3>შენი უფლებები</h3>
@@ -523,7 +523,6 @@ const real = {
   },
   async activeStrays() { const { data, error } = await sb.rpc('active_strays'); if (error) throw error; return data || []; },
   async resolveStray(id) { const { error } = await sb.rpc('resolve_stray', { p_id: id }); if (error) throw error; },
-  async trails() { const { data, error } = await sb.rpc('walk_trails'); if (error) throw error; return data || []; },
   async activeSos() { const { data, error } = await sb.rpc('active_sos'); if (error) throw error; return data || []; },
   async createSos(dogId, lat, lng) { const { error } = await sb.rpc('create_sos', { p_dog_id: dogId, p_lat: lat, p_lng: lng }); if (error) throw error; },
   async resolveSos(id) { const { error } = await sb.rpc('resolve_sos', { p_id: id }); if (error) throw error; },
@@ -581,11 +580,6 @@ const demo = {
     return [{ id: 'demo-stray-0', photo_path: '', lat: lat - .003, lng: lng + .002, note: 'ყავისფერი, მცირე ზომის, ყელსაბამით', contact: '', created_at: new Date(Date.now() - 12 * 60000).toISOString(), is_mine: false }, ...(st.strays || [])];
   },
   async resolveStray(id) { const st = demoStore.get(); st.strays = (st.strays || []).filter(x => x.id !== id); demoStore.set(st); },
-  async trails(lat, lng) {
-    const base = [['d0', .0022, .0012], ['d1', -.0016, .0021], ['d2', .0011, -.0026]], out = [];
-    base.forEach(([id, a, b], i) => { for (let k = 8; k >= 0; k--) out.push({ dog_id: id, lat: lat + a - k * .0003, lng: lng + b - k * .0002 * (i % 2 ? 1 : -1) }); });
-    return out;
-  },
   async activeSos(lat, lng) {
     const s = demoStore.get();
     const list = [{ id: 'demo-sos-1', dog_id: 'x1', name: 'ბელა', photo_path: '', lat: lat + .006, lng: lng - .004, radius_m: 1000, created_at: new Date(Date.now() - 25 * 60000).toISOString(), is_mine: false }];
@@ -628,7 +622,6 @@ let lastSent = { at: 0, pos: null }, pendingBlob = null, mapStarted = false;
 let signUpMode = false, codeStep = false;
 function setMode(up) {
   signUpMode = up;
-  if (up) askLocationOnce();
   if (codeStep) return;
   $('loginBtn').textContent = up ? 'რეგისტრაცია' : 'პროფილზე შესვლა';
   $('switchMode').textContent = up ? 'უკვე გაქვს ანგარიში? შესვლა' : 'ახალი ხარ? რეგისტრაცია';
@@ -662,7 +655,6 @@ $('loginBtn').onclick = async () => {
     btn.disabled = false; return;
   }
   if (!email.includes('@')) return toast('ჩაწერეთ სწორი ელფოსტა');
-  askLocationOnce();
   if (pw.length < 6) return toast('პაროლი მინიმუმ 6 სიმბოლო უნდა იყოს');
   if (signUpMode && !$('consent').checked) return toast('რეგისტრაციისთვის დაეთანხმეთ წესებს და პირობებს');
   btn.disabled = true;
@@ -744,20 +736,13 @@ function drawMe() {
   const el = pinEl(dog); el.classList.add('mine');
   drawMe.m = L.marker([me.lat, me.lng], { icon: L.divIcon({ className: '', html: el, iconSize: [46, 46], iconAnchor: [23, 23] }), zIndexOffset: 1000 }).addTo(layer);
 }
-let nearbyGroup = null, trailGroup = null;
+let nearbyGroup = null;
 async function loadNearby() {
   if (!me) return;
   try {
-    const [rows, trails] = await Promise.all([A.nearby(me.lat, me.lng), A.trails(me.lat, me.lng).catch(() => [])]);
-    if (trailGroup) layer.removeLayer(trailGroup);
+    const rows = await A.nearby(me.lat, me.lng);
     if (nearbyGroup) layer.removeLayer(nearbyGroup);
-    trailGroup = L.layerGroup().addTo(layer); nearbyGroup = L.layerGroup().addTo(layer);
-    const byDog = {};
-    trails.forEach(t => { (byDog[t.dog_id] = byDog[t.dog_id] || []).push([t.lat, t.lng]); });
-    Object.keys(byDog).forEach(id => {
-      if (id === dog.id && !walking) return;
-      if (byDog[id].length > 1) L.polyline(byDog[id], { color: '#2ecc71', weight: 4, opacity: 0.8, dashArray: '1 8', lineCap: 'round', interactive: false }).addTo(trailGroup);
-    });
+    nearbyGroup = L.layerGroup().addTo(layer);
     rows.filter(d => d.dog_id !== dog.id).forEach(d => {
       const pop = document.createElement('div');
       const b = document.createElement('b'); b.textContent = d.name;
@@ -790,9 +775,10 @@ async function startMap() {
     layer = L.layerGroup().addTo(map);
   }
   setTimeout(() => map.invalidateSize(), 50);
-  const p = await getPos();
-  if (!p) toast((await locPermState()) === 'denied' ? 'ლოკაცია გამორთულია. დააჭირეთ 📍 ღილაკს' : 'GPS ვერ ვიპოვე. ნაჩვენებია თბილისის ცენტრი');
-  me = p || FALLBACK; map.setView([me.lat, me.lng], 16);
+  // ლოკაციას აქ არ ვითხოვთ, ბრაუზერის ფანჯარა გამოჩნდება მხოლოდ პინის დასმისას.
+  // თუ უკვე დაშვებულია, რუკა თქვენს ადგილზე გაიხსნება.
+  const p = (await locPermState()) === 'granted' ? await getPos() : null;
+  me = p || FALLBACK; map.setView([me.lat, me.lng], p ? 16 : 13);
   if (p && p.acc > 150) toast('GPS სიზუსტე დაბალია (~' + Math.round(p.acc) + ' მ). გადით ღია ცის ქვეშ');
   drawMe(); await loadNearby(); await loadSos();
   clearInterval(pollTimer); pollTimer = setInterval(() => { loadNearby(); loadSos(); }, 10000);
@@ -1111,13 +1097,6 @@ $('deleteAcc').onclick = async () => {
 };
 
 /* ---------- ლოკაციის უფლება ---------- */
-let locAsked = false;
-async function askLocationOnce() {   // ბრაუზერის სტანდარტული ფანჯარა „Allow location?“
-  if (locAsked || !navigator.geolocation) return;
-  if ((await locPermState()) !== 'prompt') return;
-  locAsked = true;
-  navigator.geolocation.getCurrentPosition(() => { }, () => { }, { enableHighAccuracy: true, timeout: 15000, maximumAge: 60000 });
-}
 async function locPermState() {
   try { if (navigator.permissions && navigator.permissions.query) return (await navigator.permissions.query({ name: 'geolocation' })).state; }
   catch (e) { /* ბრაუზერი არ უჭერს მხარს */ }
