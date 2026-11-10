@@ -218,6 +218,31 @@ body.guest .bottom-nav{display:none!important}
 body.guest .map-controls-floating{display:none}
 body.guest .fab.sos{bottom:16px}
 body.guest .fab.locate{bottom:84px}
+
+/* ===== v3: ფიქსირებული ზედა და ქვედა პანელი (ჰაერში ცურვის გარეშე) ===== */
+.app-container{display:flex;flex-direction:column}
+.content-area{position:relative;inset:auto;flex:1;min-height:0}
+.header{position:sticky;top:0;left:auto;right:auto;flex:none;z-index:1100;border-radius:0;padding:10px 16px;min-height:0;background:#fff;-webkit-backdrop-filter:none;backdrop-filter:none;border:0;border-bottom:1px solid #e9ecef;box-shadow:none}
+.bottom-nav{position:relative;left:auto;right:auto;bottom:auto;flex:none;height:auto;min-height:64px;padding:6px 8px calc(6px + env(safe-area-inset-bottom));border-radius:0;background:#fff;-webkit-backdrop-filter:none;backdrop-filter:none;border:0;border-top:1px solid #e9ecef;box-shadow:none;z-index:1100}
+.map-controls-floating{bottom:20px}
+.fab.locate{bottom:84px}
+.fab.sos{bottom:20px}
+.sos-banner{top:12px}
+.leaflet-bottom{bottom:74px}
+#toast{bottom:100px}
+
+/* პროფილი და პარამეტრები */
+.profile-container{padding:60px 20px 20px}
+.gear{position:absolute;top:12px;right:12px;width:40px;height:40px;border-radius:50%;border:0;background:#f1f3f5;color:var(--ink);font-size:1.05rem;display:flex;align-items:center;justify-content:center}
+.settings-container{display:flex;flex-direction:column;min-height:100%;padding:12px 20px 24px}
+.settings-head{display:flex;align-items:center;gap:10px;margin-bottom:8px}
+.settings-head h2{font-size:1.15rem;color:var(--ink)}
+.icon-btn{width:40px;height:40px;border-radius:50%;border:0;background:#f1f3f5;color:var(--ink);display:flex;align-items:center;justify-content:center;font-size:1rem}
+.settings-row{display:flex;justify-content:space-between;align-items:center;width:100%;background:#fff;border:1px solid #e9ecef;border-radius:14px;padding:14px 16px;font-size:.92rem;font-weight:600;color:var(--ink);margin-top:12px}
+.settings-row i{color:#868e96;font-size:.8rem}
+.settings-spacer{flex:1;min-height:40px}
+.danger-link{align-self:center;background:none;border:0;color:#868e96;font-size:.8rem;text-decoration:underline;padding:10px;display:inline-flex;align-items:center;gap:6px}
+.danger-link i{font-size:.8rem}
 </style>
 </head>
 <body class="guest">
@@ -302,9 +327,23 @@ body.guest .fab.locate{bottom:84px}
       </div>
     </div>
 
+
+    <!-- პარამეტრები -->
+    <div id="screen-settings" class="screen">
+      <div class="settings-container">
+        <div class="settings-head">
+          <button id="settingsBack" class="icon-btn" type="button" aria-label="უკან"><i class="fa-solid fa-arrow-left"></i></button>
+          <h2>პარამეტრები</h2>
+        </div>
+        <div class="settings-spacer"></div>
+        <button id="deleteAcc" class="danger-link" type="button"><i class="fa-regular fa-trash-can"></i> ანგარიშის წაშლა</button>
+      </div>
+    </div>
+
     <!-- პროფილი -->
     <div id="screen-profile" class="screen">
       <div class="profile-container">
+        <button id="openSettings" class="gear" type="button" aria-label="პარამეტრები"><i class="fa-solid fa-gear"></i></button>
         <div class="pet-card">
           <div class="avatar-wrap">
             <button id="profileImg" class="pet-avatar" aria-label="ფოტოს შეცვლა"></button>
@@ -317,7 +356,6 @@ body.guest .fab.locate{bottom:84px}
           </div>
         </div>
         <button id="logout2" class="btn-outline">გასვლა</button>
-        <button id="deleteAcc" class="btn-danger-outline">ანგარიშის წაშლა</button>
       </div>
     </div>
   </div>
@@ -545,12 +583,12 @@ function toast(msg, ms = 3000) {
   clearTimeout(toast.t); toast.t = setTimeout(() => t.classList.remove('on'), ms);
 }
 function show(id) {
-  ['login', 'dog', 'map', 'profile'].forEach(v => $('screen-' + v).classList.toggle('active', v === id));
-  const nav = id === 'map' || id === 'profile';
+  ['login', 'dog', 'map', 'profile', 'settings'].forEach(v => $('screen-' + v).classList.toggle('active', v === id));
+  const nav = id === 'map' || id === 'profile' || id === 'settings';
   $('bottomNav').style.display = nav ? 'flex' : 'none';
   $('mainHeader').classList.toggle('hidden', id === 'login' || id === 'dog');
   document.querySelectorAll('.nav-item').forEach(n => {
-    const on = n.dataset.tab === id;
+    const on = n.dataset.tab === (id === 'settings' ? 'profile' : id);
     n.classList.toggle('active', on);
     if (on) n.setAttribute('aria-current', 'page'); else n.removeAttribute('aria-current');
   });
@@ -1242,7 +1280,9 @@ $('sos').onclick = () => user ? openStrayForm() : showAuth('დაკარგ�
 /* ---------- წესები, საჩივარი, ანგარიშის წაშლა ---------- */
 function openLegal() { $('legal').classList.remove('hidden'); $('legalBody').scrollTop = 0; $('legalClose').focus(); }
 function closeLegal() { $('legal').classList.add('hidden'); }
-$('termsLink').onclick = openLegal; $('legalClose').onclick = closeLegal;
+$('termsLink').onclick = openLegal;
+$('openSettings').onclick = () => show('settings');
+$('settingsBack').onclick = () => show('profile'); $('legalClose').onclick = closeLegal;
 document.addEventListener('keydown', e => { if (e.key === 'Escape') closeLegal(); });
 function openReport(type, id) {
   const reasons = ['ყალბი ან არასწორი', 'ფოტოზე ადამიანია', 'შეურაცხმყოფელი', 'სპამი'];
