@@ -24,8 +24,8 @@ button{cursor:pointer}
 
 /* ჰედერი */
 .header{padding:8px 16px 3px;background:#fff;display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid #f1f3f5;z-index:10}
-.logo{font-weight:700;font-size:1.15rem;color:#1a1a1a;letter-spacing:-.3px;display:flex;align-items:center;gap:6px}
-.demo{background:#1a1a1a;color:#fff;font-size:.72rem;padding:6px 12px;text-align:center}
+.logo{font-weight:700;font-size:1.15rem;color:#0F172A;letter-spacing:-.3px;display:flex;align-items:center;gap:6px}
+.demo{background:#0F172A;color:#fff;font-size:.72rem;padding:6px 12px;text-align:center}
 
 /* ეკრანები */
 .content-area{flex:1;position:relative;overflow:hidden;background:#fff;min-height:0}
@@ -39,20 +39,20 @@ button{cursor:pointer}
 .brand-mark.big{height:146px;width:135px;margin:0 auto}
 .brand-word{display:block;color:#071331;height:13px;width:77px;flex-shrink:0}
 .brand-word.big{height:30px;width:177px;margin:0 auto}
-.login-logo-area{font-size:2.5rem;color:#1a1a1a;margin-bottom:4px}
-.login-title{font-size:1.6rem;font-weight:700;color:#1a1a1a;letter-spacing:-.5px}
+.login-logo-area{font-size:2.5rem;color:#0F172A;margin-bottom:4px}
+.login-title{font-size:1.6rem;font-weight:700;color:#0F172A;letter-spacing:-.5px}
 .login-subtitle{font-size:.9rem;color:#6c757d;margin-bottom:10px}
 .paws-animation{display:flex;justify-content:center;gap:16px;margin-bottom:8px;color:#adb5bd;font-size:1.2rem}
 .paws-animation i{animation:pawPulse 1.5s infinite ease-in-out}
 .paws-animation i:nth-child(2){animation-delay:.3s}
 .paws-animation i:nth-child(3){animation-delay:.6s}
-@keyframes pawPulse{0%,100%{opacity:.4;transform:translateY(0)}50%{opacity:1;transform:translateY(-4px);color:#1a1a1a}}
+@keyframes pawPulse{0%,100%{opacity:.4;transform:translateY(0)}50%{opacity:1;transform:translateY(-4px);color:#0F172A}}
 @media (prefers-reduced-motion:reduce){.paws-animation i{animation:none}}
 .login-form-group{text-align:left}
-.login-form-group label{display:block;font-size:.85rem;font-weight:600;color:#212529;margin-bottom:6px}
+.login-form-group label{display:block;font-size:.85rem;font-weight:600;color:#0F172A;margin-bottom:6px}
 .login-form-group input{width:100%;padding:14px 16px;border:1px solid #adb5bd;border-radius:14px;outline:none;font-size:.95rem;background:#f8f9fa;transition:all .2s ease}
-.login-form-group input:focus{border-color:#1a1a1a;background:#fff;box-shadow:0 0 0 3px rgba(26,26,26,.12)}
-.btn-login{width:100%;background:#1a1a1a;color:#fff;border:none;padding:15px;border-radius:14px;font-weight:600;font-size:1rem;transition:transform .1s ease,opacity .2s;margin-top:6px}
+.login-form-group input:focus{border-color:#0F172A;background:#fff;box-shadow:0 0 0 3px rgba(15,23,42,.12)}
+.btn-login{width:100%;background:#0F172A;color:#fff;border:none;padding:15px;border-radius:14px;font-weight:600;font-size:1rem;transition:transform .1s ease,opacity .2s;margin-top:6px}
 .btn-login:active{transform:scale(.98)}
 .btn-login:disabled{opacity:.6}
 .btn-link{background:none;border:0;color:#495057;font-size:.88rem;font-weight:600;padding:8px;text-decoration:underline}
@@ -62,64 +62,64 @@ button{cursor:pointer}
 #map{width:100%;height:100%}
 .map-controls-floating{position:absolute;bottom:20px;left:0;right:0;z-index:1000;display:flex;justify-content:center;pointer-events:none}
 .toggle-switch-container{pointer-events:auto;background:rgba(255,255,255,.95);backdrop-filter:blur(12px);border-radius:30px;padding:8px 12px 8px 18px;display:flex;align-items:center;justify-content:center;gap:12px;min-width:200px;box-shadow:0 4px 20px rgba(0,0,0,.12);border:1px solid #e9ecef;transition:all .25s ease;user-select:none;font:inherit}
-.toggle-label{display:flex;align-items:center;justify-content:center;gap:8px;font-weight:600;font-size:.88rem;color:#212529;transition:color .25s ease;flex:1;text-align:center}
+.toggle-label{display:flex;align-items:center;justify-content:center;gap:8px;font-weight:600;font-size:.88rem;color:#0F172A;transition:color .25s ease;flex:1;text-align:center}
 .toggle-track{width:42px;height:24px;background:#ced4da;border-radius:20px;padding:2px;transition:background-color .25s ease;flex-shrink:0}
 .toggle-knob{width:20px;height:20px;background:#fff;border-radius:50%;box-shadow:0 1px 4px rgba(0,0,0,.15);transition:transform .25s cubic-bezier(.34,1.56,.64,1);display:flex;align-items:center;justify-content:center;color:#6c757d;font-size:.65rem}
 .toggle-switch-container.active{background:#fff;border-color:#2ecc71;box-shadow:0 4px 20px rgba(46,204,113,.2)}
 .toggle-switch-container.active .toggle-label{color:#1e8449}
 .toggle-switch-container.active .toggle-track{background:#2ecc71}
 .toggle-switch-container.active .toggle-knob{transform:translateX(18px);color:#1e8449}
-.fab{position:absolute;right:16px;z-index:1000;width:44px;height:44px;border-radius:50%;border:1px solid #e9ecef;background:#fff;color:#1a1a1a;box-shadow:0 4px 14px rgba(0,0,0,.12);display:flex;align-items:center;justify-content:center;font-size:1rem}
+.fab{position:absolute;right:16px;z-index:1000;width:44px;height:44px;border-radius:50%;border:1px solid #e9ecef;background:#fff;color:#0F172A;box-shadow:0 4px 14px rgba(0,0,0,.12);display:flex;align-items:center;justify-content:center;font-size:1rem}
 .fab.locate{bottom:76px}
 .fab.sos{bottom:18px;background:#c92a2a;border-color:#c92a2a;color:#fff;font-weight:700;font-size:.78rem}
-.pet-marker{width:46px;height:46px;border-radius:50%;border:2px solid #1a1a1a;overflow:hidden;background:#1a1a1a center/cover;color:#fff;font-weight:700;font-size:1.1rem;display:flex;align-items:center;justify-content:center;box-shadow:0 2px 8px rgba(0,0,0,.2)}
+.pet-marker{width:46px;height:46px;border-radius:50%;border:2px solid #0F172A;overflow:hidden;background:#0F172A center/cover;color:#fff;font-weight:700;font-size:1.1rem;display:flex;align-items:center;justify-content:center;box-shadow:0 2px 8px rgba(0,0,0,.2)}
 .pet-marker.mine{border-color:#2ecc71;box-shadow:0 0 0 4px rgba(46,204,113,.35),0 2px 8px rgba(0,0,0,.2)}
 
 /* პროფილი */
 .profile-container{padding:24px 20px}
 .pet-card{background:#f8f9fa;border:1px solid #e9ecef;border-radius:20px;padding:20px;display:flex;align-items:center;gap:16px;margin-bottom:20px}
 .avatar-wrap{position:relative;flex-shrink:0}
-.avatar-badge{position:absolute;right:-2px;bottom:-2px;width:26px;height:26px;border-radius:50%;background:#1a1a1a;color:#fff;border:2px solid #f8f9fa;display:flex;align-items:center;justify-content:center;font-size:.7rem;pointer-events:none}
-.pet-avatar{padding:0;width:68px;height:68px;border-radius:50%;border:1px solid #dee2e6;background:#1a1a1a center/cover;color:#fff;font-weight:700;font-size:1.5rem;display:flex;align-items:center;justify-content:center;flex-shrink:0}
-.pet-info h2{font-size:1.25rem;font-weight:700;color:#1a1a1a}
+.avatar-badge{position:absolute;right:-2px;bottom:-2px;width:26px;height:26px;border-radius:50%;background:#0F172A;color:#fff;border:2px solid #f8f9fa;display:flex;align-items:center;justify-content:center;font-size:.7rem;pointer-events:none}
+.pet-avatar{padding:0;width:68px;height:68px;border-radius:50%;border:1px solid #dee2e6;background:#0F172A center/cover;color:#fff;font-weight:700;font-size:1.5rem;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.pet-info h2{font-size:1.25rem;font-weight:700;color:#0F172A}
 .pet-info p{color:#6c757d;font-size:.85rem;margin-top:2px;word-break:break-all}
-.btn-outline{width:100%;margin-top:12px;background:#fff;color:#1a1a1a;border:1px solid #adb5bd;padding:13px;border-radius:14px;font-weight:600;font-size:.95rem}
+.btn-outline{width:100%;margin-top:12px;background:#fff;color:#0F172A;border:1px solid #adb5bd;padding:13px;border-radius:14px;font-weight:600;font-size:.95rem}
 
 /* ქვედა ნავიგაცია */
 .bottom-nav{height:70px;flex:none;background:#fff;border-top:1px solid #f1f3f5;display:flex;justify-content:space-around;align-items:center;z-index:1000}
 .nav-item{display:flex;flex-direction:column;align-items:center;gap:4px;color:#6c757d;font-size:.72rem;font-weight:500;border:none;background:none;width:50%;padding:8px 0}
 .nav-item i{font-size:1.2rem}
-.nav-item.active{color:#1a1a1a;font-weight:700}
+.nav-item.active{color:#0F172A;font-weight:700}
 /* SOS */
 .sos-banner{position:absolute;top:12px;left:12px;right:12px;z-index:1200;display:flex;align-items:center;gap:10px;background:#c92a2a;color:#fff;border:0;border-radius:14px;padding:12px 14px;font-size:.88rem;font-weight:600;text-align:left;box-shadow:0 4px 14px rgba(0,0,0,.25)}
 .sos-banner.mine{background:#7a1a1a}
 .sheet{position:absolute;left:0;right:0;bottom:0;z-index:1500;background:#fff;border-radius:20px 20px 0 0;padding:20px 20px 24px;box-shadow:0 -6px 24px rgba(0,0,0,.18);display:flex;flex-direction:column;gap:12px;max-height:75%;overflow-y:auto}
-.sheet h3{font-size:1.05rem;color:#1a1a1a}
+.sheet h3{font-size:1.05rem;color:#0F172A}
 .sheet p{font-size:.85rem;color:#495057;line-height:1.4}
 .sheet-head{display:flex;align-items:center;gap:14px}
 .sheet input[type=text]{width:100%;padding:12px 14px;border:1px solid #adb5bd;border-radius:12px;font-size:.92rem;background:#f8f9fa}
 .sheet .btn-outline{margin-top:0}
 .btn-danger{width:100%;background:#c92a2a;color:#fff;border:0;padding:14px;border-radius:14px;font-weight:600;font-size:.95rem}
 .btn-danger:disabled{opacity:.6}
-.sight-list{list-style:none;display:flex;flex-direction:column;gap:6px;font-size:.82rem;color:#212529}
+.sight-list{list-style:none;display:flex;flex-direction:column;gap:6px;font-size:.82rem;color:#0F172A}
 .pet-marker.sos{border-color:#c92a2a;box-shadow:0 0 0 4px rgba(201,42,42,.35),0 2px 8px rgba(0,0,0,.2);animation:sosPulse 1.6s infinite}
 @keyframes sosPulse{50%{box-shadow:0 0 0 10px rgba(201,42,42,.08),0 2px 8px rgba(0,0,0,.2)}}
 @media (prefers-reduced-motion:reduce){.pet-marker.sos{animation:none}}
-.sight-pin{width:30px;height:30px;border-radius:50%;background:#1a1a1a;color:#fff;border:2px solid #fff;display:flex;align-items:center;justify-content:center;font-size:.8rem}
+.sight-pin{width:30px;height:30px;border-radius:50%;background:#0F172A;color:#fff;border:2px solid #fff;display:flex;align-items:center;justify-content:center;font-size:.8rem}
 
 .stray-photo{width:100%;height:160px;border-radius:14px;border:2px dashed #adb5bd;background:#f8f9fa center/cover;color:#6c757d;font-size:2rem;display:flex;align-items:center;justify-content:center;flex-shrink:0}
 .stray-photo.big{height:200px;border:1px solid #dee2e6}
-.tel-link{font-weight:600;color:#1a1a1a;font-size:.9rem}
+.tel-link{font-weight:600;color:#0F172A;font-size:.9rem}
 .pet-marker.stray{border-color:#e8590c;box-shadow:0 0 0 4px rgba(232,89,12,.3),0 2px 8px rgba(0,0,0,.2)}
 
 .consent{display:flex;gap:10px;align-items:flex-start;text-align:left;font-size:.82rem;color:#495057;line-height:1.4}
-.consent input{width:20px;height:20px;margin-top:1px;flex-shrink:0;accent-color:#1a1a1a}
+.consent input{width:20px;height:20px;margin-top:1px;flex-shrink:0;accent-color:#0F172A}
 .link-row{display:flex;justify-content:center;gap:14px;flex-wrap:wrap;margin-top:4px}
 .btn-danger-outline{width:100%;margin-top:10px;background:#fff;color:#c92a2a;border:1px solid #c92a2a;padding:13px;border-radius:14px;font-weight:600;font-size:.95rem}
 .legal{position:absolute;inset:0;z-index:4000;background:#fff;display:flex;flex-direction:column}
 .legal-head{display:flex;align-items:center;justify-content:space-between;padding:14px 20px;border-bottom:1px solid #f1f3f5;font-weight:700}
-.legal-head button{background:none;border:0;font-size:1.3rem;padding:6px 10px;color:#1a1a1a}
-.legal-body{flex:1;overflow-y:auto;padding:8px 20px 32px;font-size:.88rem;line-height:1.55;color:#212529}
+.legal-head button{background:none;border:0;font-size:1.3rem;padding:6px 10px;color:#0F172A}
+.legal-body{flex:1;overflow-y:auto;padding:8px 20px 32px;font-size:.88rem;line-height:1.55;color:#0F172A}
 .legal-body h2{font-size:1.15rem;margin:16px 0 4px}
 .legal-body h3{margin:16px 0 6px;font-size:.98rem}
 .legal-body p{margin-bottom:8px}
@@ -133,7 +133,7 @@ button{cursor:pointer}
 .photo-rm{position:absolute;top:4px;right:4px;width:26px;height:26px;border-radius:50%;border:0;background:rgba(0,0,0,.65);color:#fff;font-size:1rem;line-height:1}
 .thumb-row{display:flex;gap:8px}
 .thumb{width:56px;height:56px;border-radius:10px;border:2px solid transparent;background:#f8f9fa center/cover}
-.thumb.on{border-color:#1a1a1a}
+.thumb.on{border-color:#0F172A}
 .ext-link{color:#0b5cad;text-decoration:underline;word-break:break-all;font-weight:600}
 .sheet textarea{width:100%;padding:12px 14px;border:1px solid #adb5bd;border-radius:12px;font:inherit;font-size:.92rem;background:#f8f9fa;resize:vertical}
 .sheet>*{flex-shrink:0}
@@ -142,24 +142,85 @@ button{cursor:pointer}
 .sheet-x{position:sticky;top:0;align-self:flex-end;margin:-10px -6px -48px 0;width:36px;height:36px;border:0;border-radius:50%;background:#f1f3f5;color:#495057;font-size:1.4rem;line-height:1;z-index:2;display:flex;align-items:center;justify-content:center}
 .loc-row{font-size:.85rem;color:#495057}
 .loc-row .btn-link{padding:0 0 0 6px;font-size:.85rem}
-.sec-head{display:flex;justify-content:space-between;align-items:center;font-size:.85rem;font-weight:600;color:#212529}
+.sec-head{display:flex;justify-content:space-between;align-items:center;font-size:.85rem;font-weight:600;color:#0F172A}
 .sec-head .req{color:#d9480f;font-size:.76rem}
 .photo-cell.empty{flex-direction:column;gap:6px;font-size:1.3rem}
 .photo-cell.empty span{font-size:.7rem;font-weight:500;color:#6c757d}
 .loc-card{display:flex;align-items:center;gap:12px;background:#f8f9fa;border:1px solid #e9ecef;border-radius:16px;padding:10px 12px}
 .loc-card.done{border-color:#2ecc71;background:#f1fbf5}
-.loc-gps{width:40px;height:40px;flex-shrink:0;border-radius:50%;border:0;background:#e9ecef;color:#1a1a1a;font-size:1rem}
+.loc-gps{width:40px;height:40px;flex-shrink:0;border-radius:50%;border:0;background:#e9ecef;color:#0F172A;font-size:1rem}
 .loc-text{flex:1;min-width:0;display:flex;flex-direction:column;font-size:.85rem;font-weight:600}
 .loc-text span{font-size:.72rem;font-weight:400;color:#6c757d;line-height:1.3}
-.loc-pin{border:0;border-radius:20px;background:#1a1a1a;color:#fff;font-weight:600;font-size:.82rem;padding:10px 16px;flex-shrink:0}
+.loc-pin{border:0;border-radius:20px;background:#0F172A;color:#fff;font-weight:600;font-size:.82rem;padding:10px 16px;flex-shrink:0}
 .btn-pub{width:100%;border:0;border-radius:14px;padding:14px;font-weight:600;font-size:.95rem;background:#e9ecef;color:#868e96}
 .btn-pub.ready{background:#c92a2a;color:#fff}
 button:focus-visible{outline:3px solid #2563eb;outline-offset:2px}
-#toast{position:absolute;left:50%;bottom:90px;transform:translateX(-50%);background:#1a1a1a;color:#fff;padding:10px 16px;border-radius:20px;font-size:.82rem;z-index:3000;max-width:90%;text-align:center;opacity:0;pointer-events:none;transition:opacity .2s}
+#toast{position:absolute;left:50%;bottom:90px;transform:translateX(-50%);background:#0F172A;color:#fff;padding:10px 16px;border-radius:20px;font-size:.82rem;z-index:3000;max-width:90%;text-align:center;opacity:0;pointer-events:none;transition:opacity .2s}
 #toast.on{opacity:1}
+
+/* ===== v2: სტუმრის რეჟიმი, Glassmorphism, ახალი ფერები ===== */
+:root{--lime:#C8FF00;--purple:#B58CFF;--red:#FF4D4D;--ink:#0F172A}
+body:not(.guest) .guest-only{display:none!important}
+body.guest .user-only{display:none!important}
+.app-container{display:block}
+.content-area{position:absolute;inset:0;flex:none;min-height:0}
+.demo{position:absolute;top:0;left:0;right:0;z-index:2000}
+
+/* მცურავი მინის პანელები */
+.header,.bottom-nav,.fab.locate,.toggle-switch-container,.auth-close{background:rgba(255,255,255,.85);-webkit-backdrop-filter:blur(20px);backdrop-filter:blur(20px);border:1px solid rgba(255,255,255,.6);box-shadow:0 12px 32px -8px rgba(0,0,0,.12)}
+.header{position:absolute;top:12px;left:12px;right:12px;z-index:1100;padding:8px 14px;min-height:46px;border-radius:20px}
+.hdr-cta{background:var(--lime);color:var(--ink);border:0;border-radius:14px;padding:9px 14px;font-weight:700;font-size:.8rem;box-shadow:0 0 20px rgba(200,255,0,.45)}
+.live-badge{display:none;align-items:center;gap:6px;background:var(--lime);color:var(--ink);font-weight:800;font-size:.72rem;padding:6px 11px;border-radius:12px;box-shadow:0 0 20px rgba(200,255,0,.45)}
+.live-badge.on{display:inline-flex}
+.live-badge::before{content:"";width:8px;height:8px;border-radius:50%;background:var(--ink);animation:livePulse 1.2s infinite}
+@keyframes livePulse{50%{opacity:.25}}
+.bottom-nav{position:absolute;left:12px;right:12px;bottom:12px;height:64px;padding:6px 8px;border-radius:24px;z-index:1100}
+.nav-item{color:#475569;padding:2px 0;gap:2px}
+.nav-item i{width:48px;height:28px;display:flex;align-items:center;justify-content:center;border-radius:14px;font-size:1.1rem;transition:background .2s}
+.nav-item.active{color:var(--ink);font-weight:700}
+.nav-item.active i{color:var(--purple);background:rgba(181,140,255,.2)}
+
+/* რუკის კონტროლები */
+.map-controls-floating{bottom:92px}
+.toggle-switch-container.active{border-color:var(--lime);box-shadow:0 0 20px rgba(200,255,0,.45),0 12px 32px -8px rgba(0,0,0,.12)}
+.toggle-switch-container.active .toggle-label{color:var(--ink)}
+.toggle-switch-container.active .toggle-track{background:var(--lime)}
+.toggle-switch-container.active .toggle-knob{transform:translateX(18px);background:var(--ink);color:var(--lime)}
+.fab.locate{bottom:156px;color:var(--ink)}
+.fab.sos{bottom:92px;width:52px;height:52px;background:var(--red);border:1px solid var(--red);color:var(--ink);font-weight:800;font-size:.8rem;box-shadow:0 0 20px rgba(255,77,77,.45)}
+.sos-banner{top:66px;background:var(--red);color:var(--ink)}
+.sos-banner.mine{background:var(--ink);color:#fff}
+.leaflet-bottom{bottom:78px}
+#toast{bottom:170px;background:var(--ink)}
+
+/* მარკერები */
+.pet-marker.mine{border-color:var(--lime);box-shadow:0 0 0 4px rgba(200,255,0,.5),0 2px 8px rgba(0,0,0,.2)}
+.pet-marker.walker{border-color:var(--lime);box-shadow:0 0 0 2px var(--ink),0 0 14px rgba(200,255,0,.6)}
+.pet-marker.stray,.pet-marker.sos{border-color:var(--red);box-shadow:0 0 0 4px rgba(255,77,77,.4),0 2px 8px rgba(0,0,0,.2);animation:sosPulse 1.6s infinite}
+@keyframes sosPulse{50%{box-shadow:0 0 0 12px rgba(255,77,77,.08),0 2px 8px rgba(0,0,0,.2)}}
+@media (prefers-reduced-motion:reduce){.pet-marker.stray,.pet-marker.sos,.live-badge::before{animation:none}}
+
+/* ღილაკები და სხვა */
+.btn-login,.btn-pub.ready{background:var(--lime);color:var(--ink);font-weight:700;box-shadow:0 0 20px rgba(200,255,0,.45)}
+.btn-danger{background:var(--red);color:var(--ink)}
+.auth-close{position:absolute;top:14px;right:14px;width:40px;height:40px;border-radius:50%;color:var(--ink);font-size:1.4rem;line-height:1;display:flex;align-items:center;justify-content:center;z-index:5}
+.auth-note{background:rgba(181,140,255,.16);border-radius:12px;padding:10px 12px;font-size:.82rem;color:var(--ink);text-align:left;line-height:1.4}
+.paws-animation{color:var(--purple)}
+.profile-container{padding:84px 20px 100px}
+.thumb.on{border-color:var(--purple)}
+.loc-card.done{border-color:var(--lime);background:#f7ffd6}
+
+/* სტუმრის რეჟიმი: ქვემოთ „შესვლა / რეგისტრაცია“ + SOS, ზემოთ ლოკაცია */
+.guest-bar{display:none;position:absolute;left:16px;right:84px;bottom:16px;z-index:1100}
+body.guest .guest-bar{display:block}
+.guest-bar .btn-login{margin:0;height:52px;padding:0 16px;border:0;border-radius:26px;font-size:.95rem}
+body.guest .bottom-nav{display:none!important}
+body.guest .map-controls-floating{display:none}
+body.guest .fab.sos{bottom:16px}
+body.guest .fab.locate{bottom:84px}
 </style>
 </head>
-<body>
+<body class="guest">
 <!-- Google Tag Manager (noscript) -->
 <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-W9RMCPM3" height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 <!-- End Google Tag Manager (noscript) -->
@@ -167,19 +228,22 @@ button:focus-visible{outline:3px solid #2563eb;outline-offset:2px}
 <svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false"><symbol id="dogify-word" viewBox="20 20 1818 308"><path fill="currentColor" fill-rule="evenodd" clip-rule="evenodd" d="M 1516 34 L 1503 29 L 1322 29 L 1321 30 L 1314 31 L 1308 34 L 1297 44 L 1293 51 L 1291 58 L 1291 295 L 1295 306 L 1303 315 L 1316 321 L 1329 321 L 1336 319 L 1344 314 L 1351 306 L 1356 294 L 1356 212 L 1357 209 L 1363 204 L 1483 204 L 1484 203 L 1491 202 L 1498 198 L 1504 192 L 1508 183 L 1508 171 L 1506 165 L 1498 156 L 1487 151 L 1365 151 L 1362 150 L 1357 145 L 1356 142 L 1356 92 L 1357 89 L 1362 84 L 1365 83 L 1504 83 L 1516 78 L 1523 71 L 1527 63 L 1527 59 L 1528 58 L 1528 53 L 1526 46 L 1521 38 Z M 1177 28 L 1164 33 L 1155 41 L 1152 46 L 1150 52 L 1150 56 L 1149 57 L 1149 292 L 1150 293 L 1151 300 L 1154 306 L 1160 313 L 1164 316 L 1173 320 L 1187 321 L 1197 318 L 1205 313 L 1212 305 L 1217 292 L 1217 55 L 1216 54 L 1215 47 L 1212 41 L 1204 33 L 1199 30 L 1192 28 Z M 27 42 L 22 51 L 20 58 L 20 287 L 23 296 L 34 310 L 47 318 L 54 319 L 55 320 L 178 320 L 179 319 L 195 318 L 196 317 L 214 314 L 235 307 L 257 297 L 281 281 L 287 276 L 304 258 L 316 240 L 321 230 L 328 210 L 330 198 L 331 197 L 331 191 L 332 190 L 332 158 L 331 157 L 331 151 L 330 150 L 328 137 L 322 120 L 310 98 L 300 85 L 279 65 L 265 55 L 253 49 L 251 47 L 230 38 L 206 31 L 196 30 L 195 29 L 189 29 L 188 28 L 180 28 L 179 27 L 53 27 L 43 30 L 37 33 Z M 91 84 L 96 82 L 173 82 L 174 83 L 185 84 L 202 89 L 215 95 L 229 104 L 242 116 L 252 129 L 261 149 L 261 152 L 263 157 L 263 163 L 264 164 L 264 184 L 263 185 L 263 190 L 262 191 L 260 201 L 252 218 L 244 229 L 231 242 L 218 251 L 199 260 L 193 261 L 189 263 L 185 263 L 179 265 L 171 265 L 170 266 L 97 266 L 96 265 L 93 265 L 86 258 L 86 255 L 85 254 L 85 95 L 87 88 Z M 1579 29 L 1571 34 L 1562 46 L 1559 56 L 1559 65 L 1560 66 L 1561 73 L 1565 81 L 1572 89 L 1640 181 L 1663 210 L 1663 295 L 1668 307 L 1677 316 L 1685 320 L 1688 320 L 1689 321 L 1702 321 L 1709 319 L 1716 315 L 1724 307 L 1728 299 L 1729 292 L 1730 291 L 1730 209 L 1743 194 L 1753 180 L 1801 120 L 1827 85 L 1832 80 L 1836 72 L 1837 65 L 1838 64 L 1838 55 L 1836 48 L 1833 42 L 1825 33 L 1821 30 L 1812 26 L 1798 26 L 1784 33 L 1779 38 L 1777 42 L 1771 49 L 1769 53 L 1752 75 L 1745 86 L 1736 97 L 1734 101 L 1725 112 L 1711 133 L 1698 150 L 1692 143 L 1688 136 L 1651 86 L 1618 39 L 1610 32 L 1599 27 L 1591 26 L 1590 27 L 1585 27 Z M 936 23 L 935 24 L 920 25 L 919 26 L 915 26 L 914 27 L 910 27 L 909 28 L 898 30 L 873 39 L 855 48 L 842 56 L 823 71 L 811 83 L 794 106 L 790 115 L 787 119 L 779 141 L 777 153 L 776 154 L 776 159 L 775 160 L 775 169 L 774 170 L 775 195 L 776 196 L 776 202 L 778 207 L 778 211 L 783 227 L 793 248 L 801 260 L 815 276 L 837 294 L 850 302 L 866 310 L 891 319 L 894 319 L 903 322 L 907 322 L 908 323 L 912 323 L 913 324 L 928 325 L 929 326 L 963 326 L 964 325 L 972 325 L 973 324 L 984 323 L 985 322 L 996 320 L 1016 313 L 1030 306 L 1044 297 L 1063 279 L 1073 261 L 1077 248 L 1077 242 L 1078 241 L 1078 180 L 1077 179 L 1076 172 L 1073 166 L 1065 158 L 1055 154 L 949 154 L 943 156 L 935 161 L 930 167 L 927 175 L 927 187 L 930 195 L 937 203 L 949 208 L 1011 208 L 1012 209 L 1012 234 L 1007 245 L 998 254 L 989 260 L 979 265 L 965 269 L 941 271 L 940 270 L 923 269 L 911 265 L 908 265 L 892 258 L 879 250 L 861 233 L 851 218 L 851 216 L 847 209 L 844 200 L 843 192 L 842 191 L 842 182 L 841 181 L 842 163 L 843 162 L 843 158 L 847 144 L 857 125 L 863 117 L 881 100 L 902 88 L 916 83 L 919 83 L 924 81 L 929 81 L 930 80 L 936 80 L 937 79 L 957 79 L 958 80 L 971 81 L 972 82 L 986 85 L 1007 95 L 1015 101 L 1025 105 L 1037 105 L 1043 103 L 1049 99 L 1056 92 L 1060 85 L 1061 78 L 1062 77 L 1062 71 L 1058 59 L 1051 52 L 1035 42 L 1022 36 L 1017 35 L 1005 30 L 1002 30 L 993 27 L 989 27 L 988 26 L 984 26 L 983 25 L 968 24 L 967 23 Z M 485 31 L 468 39 L 466 39 L 464 41 L 455 45 L 441 54 L 427 65 L 411 81 L 400 95 L 392 108 L 385 123 L 381 135 L 381 138 L 379 142 L 379 146 L 377 152 L 376 169 L 375 170 L 376 194 L 377 195 L 377 200 L 378 201 L 380 213 L 385 228 L 394 246 L 409 267 L 427 285 L 451 302 L 458 305 L 462 308 L 464 308 L 483 317 L 495 321 L 498 321 L 507 324 L 511 324 L 512 325 L 517 325 L 518 326 L 536 327 L 537 328 L 573 328 L 574 327 L 582 327 L 583 326 L 589 326 L 590 325 L 600 324 L 601 323 L 612 321 L 635 313 L 652 305 L 667 296 L 687 280 L 705 260 L 716 243 L 722 231 L 729 211 L 730 203 L 731 202 L 732 189 L 733 188 L 733 161 L 732 160 L 732 153 L 731 152 L 730 143 L 726 129 L 719 114 L 719 112 L 705 89 L 696 78 L 682 64 L 668 53 L 652 43 L 638 36 L 613 27 L 610 27 L 601 24 L 597 24 L 596 23 L 592 23 L 591 22 L 585 22 L 584 21 L 574 21 L 573 20 L 537 20 L 536 21 L 527 21 L 526 22 L 520 22 L 519 23 L 510 24 Z M 513 86 L 530 81 L 541 80 L 542 79 L 566 79 L 567 80 L 574 80 L 575 81 L 588 83 L 599 88 L 601 88 L 621 99 L 630 106 L 640 116 L 649 128 L 658 146 L 661 156 L 661 160 L 662 161 L 663 183 L 662 184 L 662 190 L 661 191 L 660 199 L 656 210 L 646 228 L 629 246 L 615 256 L 598 264 L 581 269 L 576 269 L 575 270 L 568 270 L 567 271 L 540 271 L 539 270 L 528 269 L 508 263 L 492 255 L 475 242 L 460 224 L 453 211 L 449 199 L 448 191 L 447 190 L 447 185 L 446 184 L 447 161 L 453 141 L 462 125 L 468 117 L 479 106 L 494 95 Z"/></symbol></svg>
 
 <div class="app-container">
-  <div class="header">
+  <div class="header" id="mainHeader">
     <div class="logo"><svg class="brand-mark" aria-hidden="true" focusable="false"><use href="#dogify-logo"/></svg><svg class="brand-word" role="img" aria-label="Dogify" focusable="false"><use href="#dogify-word"/></svg></div>
+    <span id="liveBadge" class="live-badge user-only">LIVE</span>
   </div>
   <div id="demoBanner" class="demo hidden">დემო რეჟიმი: Supabase არ არის მიერთებული. შედით ნებისმიერი ელფოსტით და პაროლით</div>
 
   <div class="content-area">
 
     <!-- შესვლა -->
-    <div id="screen-login" class="screen center-screen active">
+    <div id="screen-login" class="screen center-screen">
+      <button id="authClose" class="auth-close" type="button" aria-label="რუკაზე დაბრუნება">×</button>
       <div class="login-content">
         <div class="login-logo-area"><svg class="brand-mark big" aria-hidden="true" focusable="false"><use href="#dogify-logo"/></svg></div>
         <h1 class="login-title"><svg class="brand-word big" role="img" aria-label="Dogify" focusable="false"><use href="#dogify-word"/></svg></h1>
         <p class="login-subtitle">იპოვე მეზობელი ცუგოები მარტივად</p>
+        <p id="authNote" class="auth-note hidden" role="status"></p>
         <div class="paws-animation" aria-hidden="true">
           <i class="fa-solid fa-paw"></i><i class="fa-solid fa-paw"></i><i class="fa-solid fa-paw"></i>
         </div>
@@ -229,6 +293,7 @@ button:focus-visible{outline:3px solid #2563eb;outline-offset:2px}
       <div id="sheet" class="sheet hidden" role="dialog" aria-label="SOS"></div>
       <button id="locate" class="fab locate" aria-label="ჩემი ადგილმდებარეობა"><i class="fa-solid fa-location-crosshairs"></i></button>
       <button id="sos" class="fab sos" aria-label="SOS">SOS</button>
+      <div id="guestBar" class="guest-bar"><button id="guestLogin" class="btn-login" type="button">შესვლა</button></div>
       <div class="map-controls-floating">
         <button id="walkToggle" class="toggle-switch-container" role="switch" aria-checked="false">
           <span class="toggle-label"><i class="fa-solid fa-paw"></i><span id="walkText">დაიწყე სეირნობა</span></span>
@@ -414,8 +479,8 @@ button:focus-visible{outline:3px solid #2563eb;outline-offset:2px}
       <p>Dogify-ის სპეციალური ფუნქციების (SOS) გამოყენებისას დამატებით მოქმედებს შემდეგი წესები:</p>
       <ul>
         <li>პლატფორმით სარგებლობა შეუძლია მხოლოდ 18 წელს მიღწეულ პირს.</li>
-        <li>დაკარგული ან ნანახი ძაღლის განცხადება ყველა შესულ მომხმარებელს ჩანს მთელ რუკაზე 48 საათის განმავლობაში, შემდეგ ავტომატურად იმალება.</li>
-        <li>განცხადებებში კონტაქტის (მაგ. ტელეფონის) მითითება ნებაყოფლობითია და ის ყველა შესულ მომხმარებელს ეჩვენება.</li>
+        <li>დაკარგული ან ნანახი ძაღლის განცხადება ყველა ვიზიტორს (რეგისტრაციის გარეშეც) ჩანს მთელ რუკაზე 48 საათის განმავლობაში, შემდეგ ავტომატურად იმალება.</li>
+        <li>განცხადებებში კონტაქტის (მაგ. ტელეფონის) მითითება ნებაყოფლობითია და ის ყველა ვიზიტორს (რეგისტრაციის გარეშეც) ეჩვენება.</li>
         <li>ფოტოზე ადამიანები არ უნდა ჩანდეს. ცრუ განგაშის ან ყალბი განცხადების გავრცელება აკრძალულია (იხ. მუხლი 5.2).</li>
         <li>ნებისმიერ განგაშზე ან განცხადებაზე მომხმარებელს შეუძლია საჩივრის დაფიქსირება ღილაკით „დაარეპორტე“. როცა განცხადებაზე სამი სხვადასხვა მომხმარებელი დააფიქსირებს საჩივარს, ის რუკიდან ავტომატურად იმალება და შესაძლოა განიხილოს ადმინისტრაციამ (იხ. მუხლი 8).</li>
         <li>ანგარიშის გაუქმება შესაძლებელია პროფილის გვერდიდან („ანგარიშის წაშლა“), იხ. მუხლი 11.</li>
@@ -436,7 +501,7 @@ button:focus-visible{outline:3px solid #2563eb;outline-offset:2px}
         <li>სეირნობის დასრულების შემდეგ ბოლო ადგილი ბაზაში რჩება დამალული სახით და სხვა მომხმარებლებს არ ჩანს.</li>
       </ul>
       <h3>ვის ჩანს შენი მონაცემები</h3>
-      <p>სეირნობისას აქტიური ძაღლის სახელი, ფოტო და რეალური ადგილმდებარეობა ჩანს Dogify-ის ყველა შესულ მომხმარებელს რუკაზე. SOS და ნანახი ძაღლის განცხადებები (ფოტოთი, ტექსტით და მითითებული კონტაქტით) ჩანს ყველა შესულ მომხმარებელს. შენი ელფოსტა სხვებს არ ეჩვენება.</p>
+      <p>სეირნობისას აქტიური ძაღლის სახელი, ფოტო და რეალური ადგილმდებარეობა ჩანს Dogify-ის ყველა შესულ მომხმარებელს რუკაზე. SOS და ნანახი ძაღლის განცხადებები (ფოტოთი, ტექსტით და მითითებული კონტაქტით) ჩანს ყველა ვიზიტორს, რეგისტრაციის გარეშეც. შენი ელფოსტა სხვებს არ ეჩვენება.</p>
       <h3>სად ინახება</h3>
       <p>მონაცემები ინახება Supabase-ის ღრუბლოვან სერვისზე. გამოყენების ანონიმური სტატისტიკისთვის ვიყენებთ Google Tag Manager-ს და Google Analytics-ს, რომელმაც შეიძლება ქუქიები და IP-მისამართი დაამუშაოს. რუკის სურათებს ვიღებთ OpenStreetMap-ისა და CARTO-ს სერვერებიდან, ამიტომ ისინი შეიძლება ხედავდნენ შენს IP-მისამართს და რუკის იმ ნაწილს, რომელსაც უყურებ. სათაურის ფონტები იტვირთება Google Fonts-იდან.</p>
       <h3>შენი უფლებები</h3>
@@ -452,7 +517,7 @@ button:focus-visible{outline:3px solid #2563eb;outline-offset:2px}
 
   <nav class="bottom-nav" id="bottomNav" style="display:none">
     <button class="nav-item active" data-tab="map"><i class="fa-solid fa-map-location-dot"></i><span>რუკა</span></button>
-    <button class="nav-item" data-tab="profile"><i class="fa-solid fa-user"></i><span>ჩემი პროფილი</span></button>
+    <button class="nav-item user-only" data-tab="profile"><i class="fa-solid fa-user"></i><span>ჩემი პროფილი</span></button>
   </nav>
   <div id="toast" role="status"></div>
 </div>
@@ -483,6 +548,7 @@ function show(id) {
   ['login', 'dog', 'map', 'profile'].forEach(v => $('screen-' + v).classList.toggle('active', v === id));
   const nav = id === 'map' || id === 'profile';
   $('bottomNav').style.display = nav ? 'flex' : 'none';
+  $('mainHeader').classList.toggle('hidden', id === 'login' || id === 'dog');
   document.querySelectorAll('.nav-item').forEach(n => {
     const on = n.dataset.tab === id;
     n.classList.toggle('active', on);
@@ -749,6 +815,12 @@ $('photo2').onchange = async e => {
     fillProfile(); drawMe(); toast('ფოტო განახლდა');
   } catch (err) { toast('შეცდომა: ' + (err.message || err)); }
 };
+function showAuth(note) {   // სტუმარი გადადის შესვლა/რეგისტრაციის გვერდზე
+  const n = $('authNote'); n.textContent = note || ''; n.classList.toggle('hidden', !note);
+  show('login');
+}
+$('authClose').onclick = () => show('map');
+$('guestLogin').onclick = () => showAuth();
 document.querySelectorAll('.nav-item').forEach(n => n.onclick = () => show(n.dataset.tab));
 
 /* ---------- რუკა ---------- */
@@ -766,13 +838,14 @@ function drawMe() {
   drawMe.m = drawMe.c = null;
   if (!walking) return;  // სეირნობის გარეშე ჩემი ძაღლი რუკაზე არ ჩანს
   if (me.acc && me.acc < 2000)
-    drawMe.c = L.circle([me.lat, me.lng], { radius: me.acc, weight: 1, color: '#2ecc71', fillOpacity: 0.1, interactive: false }).addTo(layer);
+    drawMe.c = L.circle([me.lat, me.lng], { radius: me.acc, weight: 1, color: '#0F172A', fillColor: '#C8FF00', fillOpacity: 0.18, interactive: false }).addTo(layer);
   const el = pinEl(dog); el.classList.add('mine');
   drawMe.m = L.marker([me.lat, me.lng], { icon: L.divIcon({ className: '', html: el, iconSize: [46, 46], iconAnchor: [23, 23] }), zIndexOffset: 1000 }).addTo(layer);
 }
 let nearbyGroup = null;
 async function loadNearby() {
   if (!me) return;
+  if (!user) { if (nearbyGroup && layer) { layer.removeLayer(nearbyGroup); nearbyGroup = null; } return; }   // სტუმარს მოსეირნეები არ ჩანს
   try {
     const rows = await A.nearby(me.lat, me.lng);
     if (nearbyGroup) layer.removeLayer(nearbyGroup);
@@ -798,7 +871,8 @@ function getPos() {
 async function startMap() {
   if (mapStarted) return; mapStarted = true;
   if (!map) {
-    map = L.map('map', { zoomControl: false }).setView([FALLBACK.lat, FALLBACK.lng], 15);
+    map = L.map('map', { zoomControl: false, attributionControl: false }).setView([FALLBACK.lat, FALLBACK.lng], 15);
+    L.control.attribution({ position: 'bottomleft', prefix: false }).addTo(map);
     const OSM = 'https://tile.openstreetmap.org/{z}/{x}/{y}.png';
     const CARTO = 'https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png';
     // OSM ბლოკავს გვერდებს Referer-ის გარეშე (მაგ. file:// ფაილი კომპიუტერზე)
@@ -823,6 +897,7 @@ function setWalkUI(on) {
   $('walkToggle').classList.toggle('active', on);
   $('walkToggle').setAttribute('aria-checked', on ? 'true' : 'false');
   $('walkText').textContent = on ? 'ვსეირნობთ!' : 'დაიწყე სეირნობა';
+  $('liveBadge').classList.toggle('on', on);
 }
 async function sendPos(p) {
   const now = Date.now();
@@ -858,7 +933,10 @@ async function stopWalking() {
   try { await A.stopWalk(dog.id); } catch (e) { console.warn(e); }
   drawMe();
 }
-$('walkToggle').onclick = () => walking ? stopWalking() : startWalking();
+$('walkToggle').onclick = () => {
+  if (!user) return showAuth('სეირნობის რეჟიმისთვის საჭიროა შესვლა ან რეგისტრაცია.');
+  walking ? stopWalking() : startWalking();
+};
 $('locate').onclick = async () => {
   toast('ვეძებ ლოკაციას...');
   const p = await getPos();
@@ -938,7 +1016,7 @@ function updateBanner() {
   const mine = sosList.find(a => a.is_mine);
   let target = null, text = '';
   if (mine) { target = { kind: 'sos', a: mine }; text = 'შენი SOS აქტიურია: ' + mine.name; }
-  else if (me) {
+  else if (me && me.acc !== undefined) {   // ბანერი მხოლოდ რეალური ლოკაციისას
     const near = allItems().filter(x => !x.a.is_mine).map(x => ({ ...x, d: distM(me, x.a) }))
       .filter(x => x.d <= SOS_NEAR_M).sort((x, y) => x.d - y.d);
     if (near.length) {
@@ -955,7 +1033,7 @@ function notifyNew() {
   const ids = new Set(allItems().map(x => x.kind + ':' + x.a.id));
   if (seenSos === null) { seenSos = ids; return; }
   allItems().forEach(x => {
-    if (seenSos.has(x.kind + ':' + x.a.id) || x.a.is_mine || !me) return;
+    if (seenSos.has(x.kind + ':' + x.a.id) || x.a.is_mine || !me || me.acc === undefined) return;
     const d = distM(me, x.a);
     if (d <= SOS_NEAR_M) {
       toast((x.kind === 'sos' ? x.a.name + ' დაიკარგა ' : 'ნანახია დაკარგული ძაღლი ') + fmtDist(d) + '-ში');
@@ -966,7 +1044,7 @@ function notifyNew() {
 }
 async function loadSos() {
   const at = me || FALLBACK;
-  try { sosList = await A.activeSos(at.lat, at.lng); } catch (e) { console.warn('sos:', e); }
+  if (user) { try { sosList = await A.activeSos(at.lat, at.lng); } catch (e) { console.warn('sos:', e); } } else sosList = [];
   try { strayList = await A.activeStrays(at.lat, at.lng); } catch (e) { console.warn('stray:', e); strayList = []; }
   drawSos(); drawStrays(); updateBanner(); notifyNew(); drawSightings();
 }
@@ -1029,7 +1107,7 @@ function openStray(x) {
       try { await A.resolveStray(x.id); closeSheet(); await loadSos(); toast('დაიხურა'); } catch (e) { toast(sosError(e)); }
     }
   }));
-  if (!x.is_mine) nodes.push(el('button', { className: 'btn-link', textContent: 'დაარეპორტე', onclick: () => openReport('stray', x.id) }));
+  if (!x.is_mine) nodes.push(el('button', { className: 'btn-link', textContent: 'დაარეპორტე', onclick: () => user ? openReport('stray', x.id) : showAuth('საჩივრისთვის საჭიროა შესვლა ან რეგისტრაცია.') }));
   nodes.push(closeBtn());
   openSheet(...nodes);
 }
@@ -1159,7 +1237,7 @@ async function openAlert(a) {
     openSheet(head, note, send, el('button', { className: 'btn-link', textContent: 'დაარეპორტე', onclick: () => openReport('sos', a.id) }), closeBtn());
   }
 }
-$('sos').onclick = openStrayForm;
+$('sos').onclick = () => user ? openStrayForm() : showAuth('დაკარგული ძაღლის დასამატებლად საჭიროა რეგისტრაცია. ეს სპამისგან გვიცავს.');
 
 /* ---------- წესები, საჩივარი, ანგარიშის წაშლა ---------- */
 function openLegal() { $('legal').classList.remove('hidden'); $('legalBody').scrollTop = 0; $('legalClose').focus(); }
@@ -1204,13 +1282,17 @@ function openLocHelp() {
 async function route() {
   try {
     user = await A.user();
+    document.body.classList.toggle('guest', !user);
     clearInterval(pollTimer); mapStarted = false; seenSos = null; sosList = []; strayList = []; closeSheet();
-    if (!user) { dog = null; $('password').value = ''; setCodeStep(false); return show('login'); }
+    if (!user) {   // სტუმრის რეჟიმი: რუკა ავტორიზაციის გარეშე
+      dog = null; walking = false; setWalkUI(false); $('password').value = ''; setCodeStep(false);
+      show('map'); await startMap(); return;
+    }
     dog = await A.getDog(user.id);
     if (!dog) return show('dog');
     fillProfile();
     show('map'); await startMap();
-  } catch (e) { toast('შეცდომა: ' + (e.message || e)); show('login'); }
+  } catch (e) { toast('შეცდომა: ' + (e.message || e)); show('map'); }
 }
 if (DEMO) $('demoBanner').classList.remove('hidden');
 A.onAuth(route);
