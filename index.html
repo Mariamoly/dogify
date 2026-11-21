@@ -381,6 +381,8 @@ html,body{overscroll-behavior:none;-webkit-text-size-adjust:100%}
 .tagline{font-family:'Plus Jakarta Sans','Inter',sans-serif;font-size:.86rem;font-weight:600;letter-spacing:.24em;text-transform:lowercase;color:#321078;display:flex;align-items:center;justify-content:center;gap:.55em;margin-bottom:14px}
 .tagline.small{font-size:.8rem;letter-spacing:.18em;opacity:.85;margin:0 0 4px}
 .tag-dot{display:inline-block;width:5px;height:5px;border-radius:50%;background:#321078;opacity:.75}
+
+.beta-chip{flex-shrink:0;font-size:.6rem;font-weight:800;letter-spacing:.02em;background:#EEF2FF;color:#4338CA;border-radius:6px;padding:2px 6px}
 </style>
 </head>
 <body class="guest">
@@ -1109,11 +1111,74 @@ function pinEl(d) {
   else el.textContent = (d.name || '?').charAt(0);
   return el;
 }
+/* ---------- ბეტა ძაღლები (მაკეტი, ბაზაში არ ინახება) ---------- */
+const BETA_DOGS_ENABLED = true;   // false → ბეტა ძაღლები ქრება
+const BETA_MIN_KM = 3;            // რეალურ ლოკაციას ამაზე ახლოს არ ჩანან
+const BETA_DOGS = [
+  { name: 'ლუნა', breed: 'ბიგლი', birth_date: '2022-03-10', gender: 'f', lat: 41.7100, lng: 44.7600 },
+  { name: 'რექსი', breed: 'გერმანული ნაგაზი', birth_date: '2019-06-21', gender: 'm', lat: 41.7240, lng: 44.7550 },
+  { name: 'ბელა', breed: 'ლაბრადორი', birth_date: '2021-09-05', gender: 'f', lat: 41.7030, lng: 44.7870 },
+  { name: 'მაქსი', breed: 'გოლდენ რეტრივერი', birth_date: '2020-02-14', gender: 'm', lat: 41.6930, lng: 44.7930 },
+  { name: 'ნალა', breed: 'ჩიხუახუა', birth_date: '2023-07-30', gender: 'f', lat: 41.7010, lng: 44.7980 },
+  { name: 'ზიგი', breed: 'ტაქსა', birth_date: '2018-11-12', gender: 'm', lat: 41.6880, lng: 44.8090 },
+  { name: 'სიმბა', breed: 'ქართული ნაგაზი', birth_date: '2022-01-18', gender: 'm', lat: 41.6940, lng: 44.8170 },
+  { name: 'კირა', breed: 'ჰასკი', birth_date: '2021-05-09', gender: 'f', lat: 41.7160, lng: 44.8210 },
+  { name: 'ბონი', breed: 'ბორდერ კოლი', birth_date: '2020-10-03', gender: 'm', lat: 41.7340, lng: 44.7810 },
+  { name: 'დიანა', breed: 'პუდელი', birth_date: '2017-08-25', gender: 'f', lat: 41.7570, lng: 44.7590 },
+  { name: 'ჯეკი', breed: 'ჯეკ რასელ ტერიერი', birth_date: '2023-03-02', gender: 'm', lat: 41.7930, lng: 44.8200 },
+  { name: 'მილა', breed: 'შპიცი', birth_date: '2024-04-16', gender: 'f', lat: 41.7480, lng: 44.7830 },
+  { name: 'თორი', breed: 'როტვეილერი', birth_date: '2019-12-07', gender: 'm', lat: 41.6830, lng: 44.8300 },
+  { name: 'ტასია', breed: 'ფრანგული ბულდოგი', birth_date: '2022-09-27', gender: 'f', lat: 41.6930, lng: 44.8700 },
+  { name: 'ლორდი', breed: 'დობერმანი', birth_date: '2018-04-04', gender: 'm', lat: 41.6860, lng: 44.8070 },
+  { name: 'ფუფი', breed: 'მალტიზური ბოლონკა', birth_date: '2021-02-20', gender: 'f', lat: 41.6915, lng: 44.8085 },
+  { name: 'ბრუნო', breed: 'ბოქსერი', birth_date: '2020-07-11', gender: 'm', lat: 41.7450, lng: 44.8450 },
+  { name: 'ზოია', breed: 'იორკშირის ტერიერი', birth_date: '2024-01-09', gender: 'f', lat: 41.7240, lng: 44.8700 },
+  { name: 'ჩარლი', breed: 'კოკერ სპანიელი', birth_date: '2019-03-23', gender: 'm', lat: 41.6650, lng: 44.8000 },
+  { name: 'ლაიკა', breed: 'მეტისი (უჯიშო)', birth_date: '2022-06-15', gender: 'f', lat: 41.7050, lng: 44.7440 },
+  { name: 'ოსკარი', breed: 'ინგლისური ბულდოგი', birth_date: '2021-11-30', gender: 'm', lat: 41.6800, lng: 44.9450 },
+  { name: 'ლილო', breed: 'სამოედი', birth_date: '2023-10-12', gender: 'f', lat: 41.7300, lng: 44.9300 },
+  { name: 'დუკი', breed: 'კავკასიური ნაგაზი', birth_date: '2020-05-26', gender: 'm', lat: 41.7700, lng: 44.7700 },
+  { name: 'ჩიპი', breed: 'შიცუ', birth_date: '2025-02-18', gender: 'm', lat: 41.7055, lng: 44.7960 },
+  { name: 'ბაია', breed: 'ლაბრადორი', birth_date: '2026-06-01', gender: 'f', lat: 41.6930, lng: 44.7985 },
+  { name: 'გრეის', breed: 'გოლდენ რეტრივერი', birth_date: '2016-09-14', gender: 'f', lat: 41.7245, lng: 44.7420 },
+  { name: 'ტობი', breed: 'პაგი', birth_date: '2022-08-08', gender: 'm', lat: 41.7010, lng: 44.7985 },
+  { name: 'ნიკო', breed: 'ქართული ნაგაზი', birth_date: '2021-04-22', gender: 'm', lat: 41.7160, lng: 44.8225 },
+  { name: 'მირა', breed: 'ბიგლი', birth_date: '2025-09-03', gender: 'f', lat: 41.7480, lng: 44.7840 },
+  { name: 'ვიკი', breed: 'ჰასკი', birth_date: '2020-12-19', gender: 'm', lat: 41.7100, lng: 44.7610 }
+];
+// ბეტა ძაღლები ჩანს მხოლოდ სტუმარს (რეგისტრაციის გარეშე). ფოტოები: beta/01.jpg ... beta/30.jpg (თუ ფაილი არ არის, პინზე სახელის პირველი ასო ჩანს)
+function betaWalkers(center) {
+  const t = Date.now() / 60000, out = [];
+  BETA_DOGS.forEach((b, i) => {
+    const cycle = 36 + (i * 7) % 24;
+    if ((t + i * 11) % cycle > cycle * 0.68) return;    // დროის დაახლოებით 68% სეირნობს, დანარჩენ დროს არ ჩანს
+    const r = 120 + (i * 53) % 150, period = 9 + (i * 5) % 8, ang = (t / period + i * 0.37) * 2 * Math.PI;
+    const lat = b.lat + (r * Math.sin(ang)) / 111320;
+    const lng = b.lng + (r * 1.25 * Math.cos(ang)) / (111320 * Math.cos(b.lat * Math.PI / 180));
+    const known = center && center.acc !== undefined;   // ნამდვილი ლოკაცია ვიცით
+    if (known && distM(center, { lat, lng }) < BETA_MIN_KM * 1000) return;
+    const id = String(i + 1).padStart(2, '0');
+    out.push({ dog_id: 'beta-' + id, name: b.name, breed: b.breed, birth_date: b.birth_date, gender: b.gender, lat, lng,
+      dist_m: center ? distM(center, { lat, lng }) : 0, beta: true, photo_file: 'beta/' + id + '.jpg' });
+  });
+  return out;
+}
+const betaPhotoCache = {};
+function betaPhotoReady(file) {
+  if (!betaPhotoCache[file]) betaPhotoCache[file] = new Promise(res => { const im = new Image(); im.onload = () => res(file); im.onerror = () => res(''); im.src = file; });
+  return betaPhotoCache[file];
+}
+
 /* ---------- პინები (tear-drop) და გაშლადი ბარათები ---------- */
 let expandedPet = null;      // რომელი პინია ახლა გაშლილი
 const petMarkers = {};       // გასაღები → { marker, pet, z }
 const PIN_SVG = '<svg class="pin-shape" viewBox="0 0 48 58" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M24 0C10.745 0 0 10.745 0 24C0 37.5 24 58 24 58C24 58 48 37.5 48 24C48 10.745 37.255 0 24 0Z"/><path d="M24 1.5C11.5736 1.5 1.5 11.5736 1.5 24C1.5 36.2 23 54.8 24 55.7C25 54.8 46.5 36.2 46.5 24C46.5 11.5736 36.4264 1.5 24 1.5Z"/></svg>';
 function setPhoto(node, pet) {
+  if (pet.beta) {   // ბეტა ძაღლის ფოტო beta/NN.jpg-დან, თუ არსებობს
+    node.textContent = (pet.name || '?').charAt(0);
+    betaPhotoReady(pet.photo_file).then(f => { if (f) { node.style.backgroundImage = 'url("' + f + '")'; node.textContent = ''; } });
+    return;
+  }
   const u = A.photoUrl(pet);
   if (u) node.style.backgroundImage = 'url("' + u.replace(/"/g, '%22') + '")'; else node.textContent = (pet.name || '?').charAt(0);
 }
@@ -1131,7 +1196,8 @@ function cardEl(pet) {
   const cam = el('div', { className: 'card-cam-badge' }); cam.innerHTML = '<i class="fa-solid fa-paw"></i>';
   const paw = el('span', { className: 'card-paw-badge' }); paw.innerHTML = '<i class="fa-solid fa-paw"></i>';
   const stack = el('div', { className: 'card-mobile-stack' },
-    el('div', { className: 'card-name-row' }, el('span', { className: 'card-name-text', textContent: pet.name || '' }), paw));
+    el('div', { className: 'card-name-row' }, el('span', { className: 'card-name-text', textContent: pet.name || '' }), paw,
+      ...(pet.beta ? [el('span', { className: 'beta-chip', textContent: 'ბეტა' })] : [])));
   const det = dogDetails(pet);
   if (det) stack.append(el('div', { className: 'card-info-badge', textContent: det }));
   return el('div', { className: 'morph-card-pop' }, x, el('div', { className: 'card-avatar-wrap' }, circle, cam), stack);
@@ -1172,21 +1238,21 @@ function drawMe() {
 }
 
 let nearbyGroup = null;
+function drawWalkers(rows) {
+  if (nearbyGroup && layer) { layer.removeLayer(nearbyGroup); nearbyGroup = null; }
+  Object.keys(petMarkers).forEach(k => { if (k.startsWith('w:')) delete petMarkers[k]; });
+  nearbyGroup = L.layerGroup().addTo(layer);
+  rows.filter(d => !dog || d.dog_id !== dog.id).forEach(d => addPetMarker(nearbyGroup, 'w:' + d.dog_id, d, d.lat, d.lng, 100));
+  if (expandedPet && !petMarkers[expandedPet]) expandedPet = null;   // გაშლილი ძაღლი აღარ სეირნობს
+}
 async function loadNearby() {
   if (!me) return;
-  const dropWalkers = () => {
-    if (nearbyGroup && layer) { layer.removeLayer(nearbyGroup); nearbyGroup = null; }
-    Object.keys(petMarkers).forEach(k => { if (k.startsWith('w:')) delete petMarkers[k]; });
-  };
-  if (!user) { dropWalkers(); if (expandedPet && expandedPet.startsWith('w:')) expandedPet = null; return; }   // სტუმარს მოსეირნეები არ ჩანს
-  try {
-    const rows = await A.nearby(me.lat, me.lng);
-    dropWalkers();
-    nearbyGroup = L.layerGroup().addTo(layer);
-    rows.filter(d => d.dog_id !== dog.id).forEach(d => addPetMarker(nearbyGroup, 'w:' + d.dog_id, d, d.lat, d.lng, 100));
-    if (expandedPet && !petMarkers[expandedPet]) expandedPet = null;   // გაშლილი ძაღლი აღარ სეირნობს
-  } catch (e) { console.warn('nearby:', e); }
+  // სტუმარს ჩანს მხოლოდ ბეტა ძაღლები (მაკეტი), რეგისტრირებულს მხოლოდ ნამდვილი მოსეირნეები
+  if (!user) { drawWalkers(BETA_DOGS_ENABLED ? betaWalkers(me) : []); return; }
+  try { drawWalkers(await A.nearby(me.lat, me.lng)); }
+  catch (e) { console.warn('nearby:', e); }
 }
+
 function getPos() {
   return new Promise(res => {
     if (!navigator.geolocation) return res(null);
